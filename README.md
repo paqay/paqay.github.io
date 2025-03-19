@@ -1,2 +1,2 @@
-http://paqay.cc
+https://paqay.cc
 wesh

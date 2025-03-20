@@ -70,8 +70,14 @@
         }
 
         .social-icons a img {
-            filter: drop-shadow(0 0 30px rgb(255, 255, 255)) grayscale(70%);
+            filter: drop-shadow(0 0 30px rgb(255, 255, 255));
             transition: transform 0.3s, filter 0.3s;
+        }
+
+        @media (hover:hover) {
+            .social-icons a img {
+                filter: grayscale(70%);
+            }
         }
 
         .social-icons a:hover img {

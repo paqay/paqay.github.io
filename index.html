@@ -31,10 +31,11 @@
         }
 
         .logo {
-            width: 80%;
+            width: 50%; /* Begrenzte Größe, damit es nicht zu groß wird */
+            height: 50%;
             height: auto;
-            mix-blend-mode: difference;
-            filter: drop-shadow(0 0 20px rgba(0, 255, 0, 1));
+            /* mix-blend-mode: difference; */
+            /* filter: drop-shadow(0 0 20px rgba(0, 255, 0, 1)); */
             opacity: 0;
             animation: fadeInMove 1s ease-in-out 0.5s forwards;
             transition: transform 0.3s;
@@ -116,9 +117,10 @@
     </video>
 
     <div class="content">
-        <img src="media/paqay_tag.svg" alt="paqay logo" class="logo">
-        <source src="media/payay_logo_3d_spin.webm" type="video/webm">
-
+        <video class="logo" autoplay muted loop playsinline>
+            <source src="media/paqay_logo_3d_spin.webm" type="video/webm">
+        </video>
+        <!-- <img src="media/paqay_tag.svg" alt="paqay logo" class="logo"> -->
         <div class="social-icons">
             <a href="1020.html" target="_blank"><img src="media/icons/spotify.png" width="50"></a>
             <a href="https://instagram.com/jokkelchen" target="_blank"><img src="media/icons/instagram.png" width="50"></a>

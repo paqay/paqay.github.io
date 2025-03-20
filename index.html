@@ -69,12 +69,13 @@
         }
 
         .social-icons a img {
-            filter: drop-shadow(0 0 30px rgb(255, 255, 255));
-            transition: transform 0.3s;
+            filter: drop-shadow(0 0 30px rgb(255, 255, 255)) grayscale(70%);
+            transition: transform 0.3s, filter 0.3s;
         }
 
         .social-icons a:hover img {
             transform: scale(1.5) translateY(-10px);
+            filter: grayscale(0%);
         }
 
         @keyframes fadeIn {
@@ -116,6 +117,8 @@
 
     <div class="content">
         <img src="media/paqay_tag.svg" alt="paqay logo" class="logo">
+        <source src="media/payay_logo_3d_spin.webm" type="video/webm">
+
         <div class="social-icons">
             <a href="1020.html" target="_blank"><img src="media/icons/spotify.png" width="50"></a>
             <a href="https://instagram.com/jokkelchen" target="_blank"><img src="media/icons/instagram.png" width="50"></a>
@@ -123,8 +126,10 @@
             <a href="https://tiktok.com/@jokkelchen" target="_blank"><img src="media/icons/tiktok.png" width="50"></a>
         </div>
     </div>
-
+    <style>
+    </style>
     <div class="magnifier" id="magnifier"></div>
+
     <script>
         document.addEventListener('mousemove', (e) => {
             const magnifier = document.getElementById('magnifier');

@@ -28,7 +28,14 @@
             height: 100%;
             object-fit: fill;
             filter: blur(10px);
-            z-index: 0;
+        }
+
+        #firstVid {
+            z-index: 2;
+        }
+
+        #secondVid {
+            z-index: 1;
         }
 
         .logo {
@@ -101,14 +108,18 @@
 </head>
 
 <body>
-    <video class="background-video" autoplay muted loop playsinline>
-        <source src="media/1020 2.mp4" type="video/mp4">
+    <video class="background-video" autoplay muted loop playsinline preload="auto">
+        <source src="media/1020 2.mp4" preload="auto" type="video/mp4" id="firstVid">
+        <source src="media/1020 footage edit 1 censored vhs square.mp4.mp4" preload="auto" type="video/mp4"
+            id="secondVid">
+
     </video>
 
     <div class="content">
         <img src="media/paqay_tag.svg" alt="paqay logo" class="logo" id="logo">
         <div class="social-icons">
-            <a href="1020.html" target="_blank"><img src="media/icons/spotify.png" width="50"></a>
+            <!-- <a href="Dieb.html" target="_blank"><img src="media/icons/spotify arrows.png" width="150" id="spoti"></a> -->
+            <a href="Dieb.html" target="_blank"><img src="media/icons/spotify.png" width="50"></a>
             <a href="https://instagram.com/jokkelchen" target="_blank"><img src="media/icons/instagram.png"
                     width="50"></a>
             <a href="https://youtube.com/@paqay" target="_blank"><img src="media/icons/youtube.png" width="50"></a>
@@ -137,6 +148,8 @@
                 video.currentTime = currentTime;
                 video.play();
             }, { once: true });
+
+
         });
 
         // magnifier
@@ -152,7 +165,7 @@
             magnifier.style.transition = 'transform 0.15s ease-out';
             magnifier.style.transform = 'scale(0.5)';
             setTimeout(() => {
-            magnifier.style.transform = 'scale(1)';
+                magnifier.style.transform = 'scale(1)';
             }, 150);
         });
     </script>

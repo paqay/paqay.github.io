@@ -109,9 +109,9 @@
 
 <body>
     <video class="background-video" autoplay muted loop playsinline preload="auto">
-        <source src="media/1020 2.mp4" preload="auto" type="video/mp4" id="firstVid">
         <source src="media/1020 footage edit 1 censored vhs square.mp4.mp4" preload="auto" type="video/mp4"
-            id="secondVid">
+            id="firstVid">
+        <source src="media/1020 2.mp4" preload="auto" type="video/mp4" id="secondVid" >
 
     </video>
 
@@ -133,8 +133,9 @@
         const logo = document.getElementById('logo');
         const video = document.querySelector('.background-video');
         const videoSources = [
-            "media/1020 2.mp4",
-            "media/1020 footage edit 1 censored vhs square.mp4"
+            "media/1020 footage edit 1 censored vhs square.mp4",
+            "media/1020 2.mp4"
+            
         ];
         let currentVideoIndex = 0;
 

@@ -1,222 +1,224 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="media/STICKER 4.jpg">
-    <title>PAQAY💹WEBSITE</title>
-    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="media/STICKER 4.jpg" />
+  <title>paqay 💹 Musikproduzent aus Wien</title>
 
-    <meta name="description" content="Offizielle Website von paqay – deutscher Musikproduzent und Künstler. Hier findest du Songs, Visuals, Projekte und Kontakt.">
-    <meta name="keywords" content="paqay, Musik, Produzent, Künstler, elektronische Musik, Beats, paqay Musik, deutscher Produzent, Musikportfolio">
-  
-    <link rel="canonical" href="https://paqay.cc">
-  
-    <!-- Open Graph Tags (für Facebook, WhatsApp etc.) -->
-    <meta property="og:title" content="paqay – Musikproduzent & Künstler">
-    <meta property="og:description" content="Offizielle Website von paqay mit Musik, Visuals und Hintergrundinfos.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://paqay.cc">
-    <meta property="og:image" content="https://paqay.cc/media/spoti pb 2.jpg"> <!-- Ersetze mit deinem Bild -->
-  
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="paqay – Musikproduzent & Künstler">
-    <meta name="twitter:description" content="Entdecke die Musik von paqay – Beats, Sounddesign und mehr.">
-    <meta name="twitter:image" content="https://paqay.cc/media/spoti pb 2.jpg"> <!-- Ersetze mit deinem Bild -->
-  
-    <!-- Structured Data für Google -->
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "Person",
-          "name": "paqay",
-          "url": "https://paqay.cc",
-          "sameAs": [
-            "https://instagram.com/paqay",
-            "https://soundcloud.com/paqay",
-            "https://twitter.com/paqay"
-          ],
-          "jobTitle": "Musikproduzent",
-          "description": "paqay ist ein deutscher Musikproduzent mit Fokus auf elektronische Klangwelten.",
-          "image": "https://paqay.cc/media/spoti pb 2.jpg"  <!-- Ersetze mit deinem Bild -->
-        }
-        </script>
+  <meta name="description" content="Offizielle Website von paqay – Musikproduzent aus Wien. Elektronische Beats, Visuals, Projekte und mehr entdecken." />
+  <meta name="keywords" content="paqay, Musik, Produzent, Künstler, elektronische Musik, Beats, paqay Musik, deutscher Produzent, Musikportfolio, Wien" />
+  <link rel="canonical" href="https://paqay.cc" />
 
+  <!-- Open Graph -->
+  <meta property="og:title" content="paqay – Musikproduzent & Künstler aus Wien" />
+  <meta property="og:description" content="Offizielle Website von paqay mit Musik, Visuals und Hintergrundinfos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://paqay.cc" />
+  <meta property="og:image" content="https://paqay.cc/media/spoti pb 2.jpg" />
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="paqay – Musikproduzent & Künstler aus Wien" />
+  <meta name="twitter:description" content="Entdecke die Musik von paqay – Beats, Sounddesign und mehr." />
+  <meta name="twitter:image" content="https://paqay.cc/media/spoti pb 2.jpg" />
 
-        body,
-        html {
-            height: 100%;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "paqay",
+      "url": "https://paqay.cc",
+      "sameAs": [
+        "https://instagram.com/paqay",
+        "https://soundcloud.com/paqay",
+        "https://twitter.com/paqay"
+      ],
+      "jobTitle": "Musikproduzent",
+      "description": "paqay ist ein Musikproduzent aus Wien mit Fokus auf elektronische Klangwelten.",
+      "image": "https://paqay.cc/media/spoti pb 2.jpg"
+    }
+  </script>
 
-        .background-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: fill;
-            filter: blur(10px)brightness(1);
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        #firstVid {
-            z-index: 2;
-        }
+    html,
+    body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
 
-        #secondVid {
-            z-index: 1;
-        }
+    .background-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      filter: blur(10px) brightness(1);
+    }
 
-        .logo {
-            width: 95%;
-            height: auto;
-            filter: drop-shadow(0 0 20px rgb(255, 255, 255));
-            opacity: 0;
-            animation: fadeIn 1s ease-in-out 0.5s forwards;
-            transition: transform 0.3s;
-            cursor: pointer;
-            mix-blend-mode: difference;
-            
-        }
+    #firstVid {
+      z-index: 2;
+    }
 
-        .logo:hover {
-            transform: skewX(10deg) scale(1.1) rotate(-10deg);
-        }
+    #secondVid {
+      z-index: 1;
+    }
 
-        .content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-        }
+    .logo {
+      width: 95%;
+      height: auto;
+      filter: drop-shadow(0 0 20px rgb(255, 255, 255));
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out 0.5s forwards;
+      transition: transform 0.3s;
+      cursor: pointer;
+      mix-blend-mode: difference;
+    }
 
-        .social-icons {
-            display: flex;
-            gap: 40px;
-            margin-top: 10px;
-            padding-bottom: 10px;
-            opacity: 1;
-            animation: fadeIn 2s ease-in-out 1s forwards;
-            filter: drop-shadow(0 0 30px rgb(255, 255, 255));
-            mix-blend-mode: difference;
-        }
+    .logo:hover {
+      transform: skewX(10deg) scale(1.1) rotate(-10deg);
+    }
 
-        .social-icons a img {
-            transition: transform 0.3s, filter 0.3s;
-        }
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
 
-        /* Only apply grayscale on devices that support hover */
-        @media (hover: hover) {
-            .social-icons a img {
-                filter: grayscale(100%);
-            }
+    .social-icons {
+      display: flex;
+      gap: 40px;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      animation: fadeIn 2s ease-in-out 1s forwards;
+      filter: drop-shadow(0 0 30px rgb(255, 255, 255))grayscale(100%);
+      mix-blend-mode: difference;
+    }
 
-            .logo {
-                width: 70%;
-            }
-        }
+    .social-icons a img {
+      transition: transform 0.3s, filter 0.3s;
+    }
 
-        .social-icons a:hover img {
-            transform: scale(1.5) translateY(-10px);
-            filter: grayscale(0%);
-        }
+    @media (hover: hover) {
+      .social-icons a img {
+        filter: grayscale(100%);
+      }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
+      .logo {
+        width: 70%;
+      }
+    }
 
-        .magnifier {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 11;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
-    </style>
+    .social-icons a:hover img {
+      transform: scale(1.5) translateY(-10px);
+      filter: grayscale(0%);
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .magnifier {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 11;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    /* SEO Text versteckt, aber lesbar */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 
 <body>
-    
-    
-    *paqay
-    <video class="background-video" autoplay muted loop playsinline preload="auto">
-        <source src="media/1020 footage edit 1 censored vhs square 123.00.mp4" preload="auto" type="video/mp4"
-            id="firstVid">
-        <source src="media/1020 2.mp4" preload="auto" type="video/mp4" id="secondVid" >
+  <video class="background-video" autoplay muted loop playsinline preload="auto">
+    <source src="media/1020 footage edit 1 censored vhs square 123.00.mp4" preload="auto" type="video/mp4" id="firstVid" />
+    <source src="media/1020 2.mp4" preload="auto" type="video/mp4" id="secondVid" />
+  </video>
 
-    </video>
-
-    <div class="content">
-        <img src="media/paqay_tag inverted.svg" alt="paqay logo" class="logo" id="logo">
-        <div class="social-icons">
-            <a href="Stoney.html" target="_blank"><img src="media/icons/spotify.png" width="50"></a>
-            <a href="https://instagram.com/paqayri" target="_blank"><img src="media/icons/instagram.png"
-                    width="50"></a>
-            <a href="https://youtube.com/@paqay" target="_blank"><img src="media/icons/youtube.png" width="50"></a>
-            <a href="https://tiktok.com/@paqayri" target="_blank"><img src="media/icons/tiktok.png" width="50"></a>
-        </div>
+  <div class="content">
+    <img src="media/paqay_tag inverted.svg" alt="paqay Logo" class="logo" id="logo" />
+    <div class="social-icons">
+      <a href="Stoney.html" target="_blank"><img src="media/icons/spotify.png" alt="Spotify Icon" width="50" /></a>
+      <a href="https://instagram.com/paqayri" target="_blank"><img src="media/icons/instagram.png" alt="Instagram Icon" width="50" /></a>
+      <a href="https://youtube.com/@paqay" target="_blank"><img src="media/icons/youtube.png" alt="YouTube Icon" width="50" /></a>
+      <a href="https://tiktok.com/@paqayri" target="_blank"><img src="media/icons/tiktok.png" alt="TikTok Icon" width="50" /></a>
     </div>
+  </div>
 
-    <div class="magnifier" id="magnifier"></div>
+  <div class="magnifier" id="magnifier"></div>
 
-    <script>
-        const logo = document.getElementById('logo');
-        const video = document.querySelector('.background-video');
-        const videoSources = [
-            "media/1020 footage edit 1 censored vhs square.mp4",
-            "media/1020 2.mp4"
-            
-        ];
-        let currentVideoIndex = 0;
+  <!-- SEO-Text versteckt, aber für Google lesbar -->
+  <div class="visually-hidden">
+    <h1>paqay – Musikproduzent aus Wien</h1>
+    <p>Willkommen auf der offiziellen Website von paqay – einem innovativen Musikproduzenten mit Sitz in Wien. Hier findest du elektronische Musik, Beats, Visuals und kreative Projekte.</p>
+    <p>Folge paqay auf Spotify, Instagram, YouTube und TikTok für exklusive Einblicke und neue Releases.</p>
+  </div>
 
-        // logo click
-        logo.addEventListener('click', () => {
-            const currentTime = video.currentTime;
-            currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
-            video.querySelector('source').src = videoSources[currentVideoIndex];
-            video.load();
-            video.addEventListener('loadeddata', () => {
-                video.currentTime = currentTime;
-                video.play();
-            }, { once: true });
+  <script>
+    const logo = document.getElementById('logo');
+    const video = document.querySelector('.background-video');
+    const videoSources = [
+      "media/1020 footage edit 1 censored vhs square.mp4",
+      "media/1020 2.mp4"
+    ];
+    let currentVideoIndex = 0;
 
+    logo.addEventListener('click', () => {
+      const currentTime = video.currentTime;
+      currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
+      video.querySelector('source').src = videoSources[currentVideoIndex];
+      video.load();
+      video.addEventListener('loadeddata', () => {
+        video.currentTime = currentTime;
+        video.play();
+      }, { once: true });
+    });
 
-        });
+    document.addEventListener('mousemove', (e) => {
+      const magnifier = document.getElementById('magnifier');
+      magnifier.style.left = `${e.clientX - 75}px`;
+      magnifier.style.top = `${e.clientY - 75}px`;
+    });
 
-        // magnifier
-        document.addEventListener('mousemove', (e) => {
-            const magnifier = document.getElementById('magnifier');
-            magnifier.style.left = `${e.clientX - 75}px`;
-            magnifier.style.top = `${e.clientY - 75}px`;
-        });
-
-        // click effect
-        document.addEventListener('click', () => {
-            const magnifier = document.getElementById('magnifier');
-            magnifier.style.transition = 'transform 0.15s ease-out';
-            magnifier.style.transform = 'scale(0.5)';
-            setTimeout(() => {
-                magnifier.style.transform = 'scale(1)';
-            }, 150);
-        });
-    </script>
+    document.addEventListener('click', () => {
+      const magnifier = document.getElementById('magnifier');
+      magnifier.style.transition = 'transform 0.15s ease-out';
+      magnifier.style.transform = 'scale(0.5)';
+      setTimeout(() => {
+        magnifier.style.transform = 'scale(1)';
+      }, 150);
+    });
+  </script>
 </body>
 
 </html>

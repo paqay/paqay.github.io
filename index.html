@@ -98,16 +98,6 @@
       text-align: center;
     }
 
-    .social-icons {
-      display: flex;
-      gap: 40px;
-      margin-top: 10px;
-      padding-bottom: 10px;
-      animation: fadeIn 2s ease-in-out 1s forwards;
-      filter: drop-shadow(0 0 30px rgb(255, 255, 255))grayscale(100%);
-      mix-blend-mode: difference;
-    }
-
     .social-icons a img {
       transition: transform 0.3s, filter 0.3s;
     }
@@ -121,7 +111,53 @@
         width: 70%;
       }
     }
+        
+    .social-icons {
+        display: flex;
+        gap: 40px;
+        margin-top: 10px;
+        padding-bottom: 10px;
+        animation: fadeIn 2s ease-in-out 1s forwards;
+        filter: drop-shadow(0 0 30px rgb(255, 255, 255)) grayscale(100%);
+        mix-blend-mode: difference;
+        justify-content: center; /* Center the icons */
+    }
 
+    .social-icons a img {
+        transition: transform 0.3s, filter 0.3s;
+    }
+
+    @media (max-width: 768px) {
+        .social-icons {
+            gap: 20px; /* Reduce the gap between icons for smaller screens */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .social-icons {
+            gap: 10px; /* Further reduce the gap for very small screens */
+        }
+
+        .social-icons a img {
+            width: 30px; /* Adjust icon size for very small screens */
+            height: 30px;
+        }
+    }
+
+    @media (hover: hover) {
+        .social-icons a img {
+            filter: grayscale(100%);
+        }
+
+        .logo {
+            width: 70%;
+        }
+    }
+
+    .social-icons a:hover img {
+        transform: scale(1.5) translateY(-10px);
+        filter: grayscale(0%);
+    }
     .social-icons a:hover img {
       transform: scale(1.5) translateY(-10px);
       filter: grayscale(0%);

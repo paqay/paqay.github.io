@@ -180,6 +180,15 @@
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     }
 
+    /* Disable the magnifier on mobile devices */
+    @media (hover: none) and (pointer: coarse) {
+      .magnifier {
+        display: none; /* Hide the magnifier circle */
+      }
+    }
+
+    
+
     /* SEO Text versteckt, aber lesbar */
     .visually-hidden {
       position: absolute;

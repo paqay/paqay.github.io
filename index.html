@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,8 +48,7 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
       height: 100%;
       font-family: Arial, sans-serif;
       overflow: hidden;
@@ -66,25 +64,15 @@
       filter: blur(10px) brightness(1);
     }
 
-    #firstVid {
-      z-index: 2;
-    }
-
-    #secondVid {
-      z-index: 1;
-    }
-
     .logo {
-      
       width: 95%;
       height: auto;
       opacity: 0;
       animation: fadeIn 1s ease-in-out 0.5s forwards;
       transition: transform 0.3s;
       cursor: pointer;
-      mix-blend-mode:difference;
+      mix-blend-mode: difference;
       filter: drop-shadow(0 0 20px rgb(255, 255, 255));
-
       user-drag: none;
       -webkit-user-drag: none;
       user-select: none;
@@ -106,72 +94,49 @@
       text-align: center;
     }
 
+    .social-icons {
+      display: flex;
+      gap: 40px;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      animation: fadeIn 2s ease-in-out 1s forwards;
+      filter: drop-shadow(0 0 30px rgb(255, 255, 255)) grayscale(100%);
+      mix-blend-mode: difference;
+      justify-content: center;
+    }
+
     .social-icons a img {
       transition: transform 0.3s, filter 0.3s;
+    }
+
+    .social-icons a:hover img {
+      transform: scale(1.5) translateY(-10px);
+      filter: grayscale(0%);
+    }
+
+    @media (max-width: 768px) {
+      .social-icons {
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .social-icons {
+        gap: 20px;
+      }
+      .social-icons a img {
+        width: 40px;
+        height: 40px;
+      }
     }
 
     @media (hover: hover) {
       .social-icons a img {
         filter: grayscale(100%);
       }
-
       .logo {
         width: 70%;
       }
-    }
-        
-    .social-icons {
-        display: flex;
-        gap: 40px;
-        margin-top: 10px;
-        padding-bottom: 10px;
-        animation: fadeIn 2s ease-in-out 1s forwards;
-        filter: drop-shadow(0 0 30px rgb(255, 255, 255)) grayscale(100%);
-        mix-blend-mode: difference;
-        justify-content: center; /* Center the icons */
-    }
-
-    .social-icons a img {
-        transition: transform 0.3s, filter 0.3s;
-    }
-
-    @media (max-width: 768px) {
-        .social-icons {
-            gap: 20px; /* Reduce the gap between icons for smaller screens */
-        }
-    }
-
-    @media (max-width: 480px) {
-        .social-icons {
-            gap: 20px; /* Further reduce the gap for very small screens */
-        }
-        
-        
-        .social-icons a img {
-            width: 40px; 
-            height: 40px;
-            
-        }
-       
-    }
-
-    @media (hover: hover) {
-        .social-icons a img {
-            filter: grayscale(100%);
-        }
-
-        .logo {
-            width: 70%;
-        }
-    }
-
-    .social-icons a:hover img {
-        transform: scale(1.5) translateY(-10px);
-        filter: grayscale(0%);
-    }
-    .social-icons a:hover img {
-      transform: scale(1.5) translateY(-10px);
-      filter: grayscale(0%);
     }
 
     @keyframes fadeIn {
@@ -191,14 +156,11 @@
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     }
 
-    /* Disable the magnifier on mobile devices */
     @media (hover: none) and (pointer: coarse) {
       .magnifier {
-        display: none; /* Hide the magnifier circle */
+        display: none;
       }
     }
-
-    
 
     /* SEO Text versteckt, aber lesbar */
     .visually-hidden {
@@ -217,36 +179,45 @@
 
 <body>
   <video class="background-video" autoplay muted loop playsinline preload="auto">
-    <source src="media/1020 footage.mp4" preload="auto" type="video/mp4" id="firstVid" />
-    <source src="media/1020 edit.mp4" preload="auto" type="video/mp4" id="secondVid" />
+    <source src="media/1020 footage.mp4" type="video/mp4" />
   </video>
 
   <div class="content">
-    <img src="media/paqay_tag inverted.svg" alt="paqay Logo" class="logo" id="logo"/>
+    <img src="media/paqay_tag inverted.svg" alt="paqay Logo" class="logo" id="logo" />
     <div class="social-icons">
-      <a href="https://open.spotify.com/artist/4BvTUdwQQrVKw3KZGkGjYJ?si=_nJN-rzsTemT21kCUBkHuw" target="_blank"><img src="media/icons/spotify.png" alt="Spotify Icon" width="50" /></a>
-      <a href="https://music.apple.com/de/artist/paqay/1739935752" target="_blank"><img src="media/icons/Apple_Music_icon.svg" alt="AppleMusic Icon" width="50" /></a>
-      <a href="https://soundcloud.com/paqay" target="_blank"><img src="media/icons/SoundCloud.png" alt="SoundCloud Icon" width="50" /></a>
-      <a href="https://instagram.com/paqayri" target="_blank"><img src="media/icons/instagram.png" alt="Instagram Icon" width="50" /></a>
-      <a href="https://tiktok.com/@paqayri" target="_blank"><img src="media/icons/tiktok.png" alt="TikTok Icon" width="50" /></a>
-      <a href="https://youtube.com/@paqay" target="_blank"><img src="media/icons/youtube.png" alt="YouTube Icon" width="50" /></a>
+      <a href="https://open.spotify.com/artist/4BvTUdwQQrVKw3KZGkGjYJ?si=_nJN-rzsTemT21kCUBkHuw" target="_blank">
+        <img src="media/icons/spotify.png" alt="Spotify Icon" width="50" />
+      </a>
+      <a href="https://music.apple.com/de/artist/paqay/1739935752" target="_blank">
+        <img src="media/icons/Apple_Music_icon.svg" alt="AppleMusic Icon" width="50" />
+      </a>
+      <a href="https://soundcloud.com/paqay" target="_blank">
+        <img src="media/icons/SoundCloud.png" alt="SoundCloud Icon" width="50" />
+      </a>
+      <a href="https://instagram.com/paqayri" target="_blank">
+        <img src="media/icons/instagram.png" alt="Instagram Icon" width="50" />
+      </a>
+      <a href="https://tiktok.com/@paqayri" target="_blank">
+        <img src="media/icons/tiktok.png" alt="TikTok Icon" width="50" />
+      </a>
+      <a href="https://youtube.com/@paqay" target="_blank">
+        <img src="media/icons/youtube.png" alt="YouTube Icon" width="50" />
+      </a>
     </div>
   </div>
 
   <div class="magnifier" id="magnifier"></div>
 
-  <!-- SEO-Text versteckt, aber für Google lesbar -->
   <div class="visually-hidden">
     <h1>paqay – Musikproduzent aus Wien</h1>
     <p>Willkommen auf der offiziellen Website von paqay – einem innovativen Rapper und Musikproduzenten mit Sitz in Wien. Hier findest du elektronische Musik, Beats, Visuals und kreative Projekte.</p>
     <p>Folge paqay auf Spotify, Instagram, YouTube und TikTok für exklusive Einblicke und neue Releases.</p>
   </div>
 
-
-
   <script>
     const logo = document.getElementById('logo');
     const video = document.querySelector('.background-video');
+    const magnifier = document.getElementById('magnifier');
     const videoSources = [
       "media/1020 footage.mp4",
       "media/1020 edit.mp4"
@@ -265,13 +236,11 @@
     });
 
     document.addEventListener('mousemove', (e) => {
-      const magnifier = document.getElementById('magnifier');
       magnifier.style.left = `${e.clientX - 75}px`;
       magnifier.style.top = `${e.clientY - 75}px`;
     });
 
     document.addEventListener('click', () => {
-      const magnifier = document.getElementById('magnifier');
       magnifier.style.transition = 'transform 0.15s ease-out';
       magnifier.style.transform = 'scale(0.5)';
       setTimeout(() => {
@@ -280,5 +249,4 @@
     });
   </script>
 </body>
-
 </html>

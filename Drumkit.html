@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="media/flakturm grafik 2.ico" />
+  <title>paqay - Download 💹</title>
+
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+  
+    html, body { 
+      height: 100%; 
+      /* System-Font-Stack für SF Pro auf Apple-Geräten */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      overflow: hidden; 
+      background: #000; 
+    }
+  
+    .background-video {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      object-fit: cover; /* 'cover' füllt den Screen besser aus als 'fill' */
+      filter: blur(10px) brightness(0.8);
+    }
+  
+    .content {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; text-align: center;
+      position: relative; z-index: 10;
+    }
+  
+    .logo {
+      width: 70%; max-width: 600px; opacity: 0;
+      animation: fadeIn 1.5s ease-in-out forwards;
+      mix-blend-mode: difference;
+      filter: drop-shadow(0 0 20px white);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+  
+    .status-text {
+      margin-top: 20px; 
+      color: white; 
+      text-transform: uppercase;
+      letter-spacing: 2px; 
+      font-size: 12px; 
+      font-weight: 500; /* Medium Weight für SF Pro Look */
+      opacity: 0.7;
+      animation: fadeIn 2s ease-in-out 0.5s forwards;
+    }
+  
+    @keyframes fadeIn { to { opacity: 1; } }
+  </style>
+</head>
+
+<body>
+  <video class="background-video" autoplay muted loop playsinline>
+    <source src="media/1020 footage.mp4" type="video/mp4" />
+  </video>
+
+  <div class="content">
+    <a href="!%201020_PACK%20@paqay.zip" download>
+      <img src="media/paqay_tag inverted.svg" alt="paqay Logo" class="logo" />
+    </a>
+    <p class="status-text">Download startet automatisch...</p>
+  </div>
+
+  <script>
+    // Automatischer Download nach 1,5 Sekunden
+    window.onload = () => {
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = '!%201020_PACK%20@paqay.zip';
+        link.download = '! 1020_PACK @paqay.zip';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }, 1500);
+    };
+  </script>
+</body>
+</html>

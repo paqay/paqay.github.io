@@ -274,6 +274,18 @@
   </div>
 
   <script>
+    // Check if the URL contains specific parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmSource = urlParams.get('utm_source');
+    
+    // If the source is Instagram, hide the Instagram icon
+    if (utmSource === 'ig') {
+      const instagramIcon = document.querySelector('a[href="https://instagram.com/paqay_"]');
+      if (instagramIcon) {
+        instagramIcon.style.display = 'none';
+      }
+    }
+
     const logo = document.getElementById('logo');
     const video = document.querySelector('.background-video');
     const magnifier = document.getElementById('magnifier');

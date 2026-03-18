@@ -354,12 +354,59 @@
     const logo = document.getElementById('logo');
     const video = document.querySelector('.background-video');
     const magnifier = document.getElementById('magnifier');
-    const videoSources = [
+    
+    // Fallback-Videos für den Fall, dass die GitHub API nicht erreicht wird
+    let videoSources = [
       "media/1020 footage.mp4",
       "media/1020 edit.mp4"
     ];
     let currentVideoIndex = 0;
 
+    // Funktion um Videos dynamisch aus dem 'media' Ordner zu laden
+    function loadDynamicVideos() {
+      fetch('https://api.github.com/repos/paqay/paqay.github.io/contents/media')
+        .then(response => {
+          if (!response.ok) throw new Error('GitHub API Error oder Rate Limit');
+          return response.json();
+        })
+        .then(files => {
+          // Alle .mp4 Dateien herausfiltern
+          const mp4Files = files
+            .filter(file => file.name.endsWith('.mp4'))
+            .map(file => "media/" + file.name);
+          
+          if (mp4Files.length > 0) {
+            videoSources = mp4Files;
+          }
+          
+          // Zufälliges Video zum Start wählen
+          playRandomVideo();
+        })
+        .catch(error => {
+          console.warn('Nutze Video-Fallback:', error);
+          // Zufälliges Fallback-Video wählen
+          playRandomVideo();
+        });
+    }
+
+    function playRandomVideo() {
+      // Wähle einen zufälligen Index aus
+      const randomIndex = Math.floor(Math.random() * videoSources.length);
+      currentVideoIndex = randomIndex;
+      
+      const source = video.querySelector('source');
+      // Nicht neu laden, falls es bereits das richtige ist (spart Ladezeit)
+      if (source.getAttribute('src') !== videoSources[currentVideoIndex]) {
+        source.src = videoSources[currentVideoIndex];
+        video.load();
+        video.play().catch(e => console.log('Autoplay blockiert:', e));
+      }
+    }
+
+    // Beim Laden der Seite nach Videos suchen
+    loadDynamicVideos();
+
+    // Beim Klicken aufs Logo weiterhin durchschalten
     logo.addEventListener('click', () => {
       const currentTime = video.currentTime;
       currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
@@ -367,7 +414,7 @@
       video.load();
       video.addEventListener('loadeddata', () => {
         video.currentTime = currentTime;
-        video.play();
+        video.play().catch(() => {});
       }, { once: true });
     });
 

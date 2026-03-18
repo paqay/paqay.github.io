@@ -239,9 +239,11 @@
       top: 40px;
       right: 40px;
       z-index: 30;
-      width: 100px;
-      height: 100px;
-      background: #ff2a2a;
+      width: 110px;
+      height: 110px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
       color: #fff;
       font-weight: 800;
       font-size: 16px;
@@ -250,38 +252,34 @@
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      border-radius: 50%;
-      border: 3px dashed #fff;
-      box-shadow: 0 8px 25px rgba(255, 42, 42, 0.5);
+      clip-path: polygon(50% 0%, 61% 16%, 80% 10%, 83% 29%, 100% 35%, 91% 52%, 100% 68%, 82% 73%, 78% 92%, 59% 86%, 50% 100%, 38% 85%, 20% 90%, 16% 72%, 0% 66%, 8% 50%, 0% 34%, 15% 26%, 18% 8%, 37% 14%);
       transform: rotate(12deg);
-      animation: sticker-wobble 3s infinite ease-in-out, fadeIn 1s ease-in-out 1.2s forwards;
+      animation: sticker-wobble-glass 4s infinite ease-in-out, fadeIn 1s ease-in-out 1.2s forwards;
       opacity: 0;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
+      font-family: inherit;
     }
     
     .sticker-btn::before {
       content: '';
       position: absolute;
       top: 0; left: -100%; width: 50%; height: 100%;
-      background: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.2);
       transform: skewX(-20deg);
       animation: sticker-shine 4s infinite ease-in-out;
     }
 
     .sticker-btn:hover {
-      background: #ff1111;
+      background: rgba(255, 255, 255, 0.15);
       transform: scale(1.1) rotate(0deg);
       animation: none;
       opacity: 1;
-      box-shadow: 0 12px 35px rgba(255, 42, 42, 0.7);
       transition: all 0.3s ease;
     }
 
     .sticker-btn span {
       line-height: 1.1;
       text-align: center;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
       z-index: 2;
     }
 
@@ -292,9 +290,9 @@
       font-weight: 600;
     }
 
-    @keyframes sticker-wobble {
+    @keyframes sticker-wobble-glass {
       0%, 100% { transform: translateY(0) rotate(12deg) scale(1); }
-      50% { transform: translateY(-10px) rotate(4deg) scale(1.05); box-shadow: 0 15px 35px rgba(255, 42, 42, 0.6); }
+      50% { transform: translateY(-8px) rotate(4deg) scale(1.05); }
     }
     
     @keyframes sticker-shine {
@@ -306,8 +304,8 @@
       .sticker-btn {
         top: 20px;
         right: 20px;
-        width: 80px;
-        height: 80px;
+        width: 85px;
+        height: 85px;
         font-size: 13px;
       }
       .sticker-btn .small {

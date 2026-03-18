@@ -302,7 +302,7 @@
 
 <body>
   <video class="background-video" autoplay muted loop playsinline preload="auto">
-    <source src="media/1020 footage.mp4" type="video/mp4" />
+    <source src="media/videos/1020 footage.mp4" type="video/mp4" />
   </video>
 
   <div class="content">
@@ -357,14 +357,14 @@
     
     // Fallback-Videos für den Fall, dass die GitHub API nicht erreicht wird
     let videoSources = [
-      "media/1020 footage.mp4",
-      "media/1020 edit.mp4"
+      "media/videos/1020 footage.mp4",
+      "media/videos/1020 edit.mp4"
     ];
     let currentVideoIndex = 0;
 
     // Funktion um Videos dynamisch aus dem 'media' Ordner zu laden
     function loadDynamicVideos() {
-      fetch('https://api.github.com/repos/paqay/paqay.github.io/contents/media')
+      fetch('https://api.github.com/repos/paqay/paqay.github.io/contents/media/videos')
         .then(response => {
           if (!response.ok) throw new Error('GitHub API Error oder Rate Limit');
           return response.json();
@@ -373,7 +373,7 @@
           // Alle .mp4 Dateien herausfiltern
           const mp4Files = files
             .filter(file => file.name.endsWith('.mp4'))
-            .map(file => "media/" + file.name);
+            .map(file => "media/videos/" + file.name);
           
           if (mp4Files.length > 0) {
             videoSources = mp4Files;

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="media/flakturm grafik 2.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+    <title>404 - Seite nicht gefunden</title>
+
+    <script>
+        // Hole den aktuellen Pfad und wandle ihn in Kleinbuchstaben um
+        var path = window.location.pathname.toLowerCase();
+        
+        // Entferne eventuelle abschließende Slashes oder ".html"
+        path = path.replace(/\/$/, '').replace(/\.html$/, '');
+
+        // Prüfe auf Ticket-Variationen
+        if (path === '/tickets' || path === '/ticket') {
+            // Leite direkt zum Eventbrite Link weiter
+            window.location.replace("https://www.eventbrite.at/e/mollymia-tickets-1985230467770");
+        }
+    </script>
+    
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        html, body { 
+            height: 100%; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow: hidden; 
+            background: #000; 
+        }
+
+        .background-video {
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            object-fit: cover; 
+            filter: blur(10px) brightness(0.8);
+            z-index: 1;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 20;
+            color: white;
+            text-decoration: none;
+            mix-blend-mode: difference;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            opacity: 1 !important;
+        }
+
+        .content {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center; 
+            height: 100%; 
+            text-align: center;
+            position: relative; 
+            z-index: 10;
+        }
+
+        .logo {
+            width: 70%; 
+            max-width: 600px; 
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            mix-blend-mode: difference;
+            filter: drop-shadow(0 0 20px white);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .status-text {
+            font-family: 'Inter', sans-serif;
+            margin-top: 10px; 
+            color: white; 
+            text-transform: uppercase;
+            letter-spacing: 2px; 
+            font-size: 16px; 
+            font-weight: 500; 
+            opacity: 0;
+            animation: fadeIn 2s ease-in-out 0.5s forwards;
+        }
+
+        .sub-text {
+            font-family: 'Inter', sans-serif;
+            margin-top: 15px; 
+            color: white; 
+            font-size: 12px; 
+            font-weight: 500; 
+            opacity: 0;
+            animation: fadeIn 2s ease-in-out 1s forwards;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding-bottom: 2px;
+            transition: opacity 0.3s ease, border-color 0.3s ease;
+        }
+
+        .sub-text:hover {
+            opacity: 1 !important;
+            border-color: rgba(255,255,255,1);
+        }
+
+        @keyframes fadeIn { 
+            to { opacity: 1; } 
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+    </a>
+
+    <video class="background-video" autoplay muted loop playsinline>
+        <source src="media/1020 footage.mp4" type="video/mp4" />
+    </video>
+
+    <div class="content">
+        <a href="/">
+            <img src="media/paqay_tag inverted.svg" alt="paqay Logo" class="logo" />
+        </a>
+        <p class="status-text">404 - Seite nicht gefunden</p>
+        <a href="/" class="sub-text">Zurück zur Startseite</a>
+    </div>
+</body>
+</html>

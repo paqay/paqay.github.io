@@ -252,7 +252,9 @@
       z-index: 30;
       width: 150px;
       height: 150px;
-      background: #fff;
+      background: none; /* No background on the main container to hide the square */
+      border: none;
+      outline: none;
       mix-blend-mode: difference;
       filter: drop-shadow(0 0 10px rgb(255, 255, 255));
       color: #000;
@@ -263,13 +265,25 @@
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      clip-path: polygon(50% 0%, 61% 16%, 80% 10%, 83% 29%, 100% 35%, 91% 52%, 100% 68%, 82% 73%, 78% 92%, 59% 86%, 50% 100%, 38% 85%, 20% 90%, 16% 72%, 0% 66%, 8% 50%, 0% 34%, 15% 26%, 18% 8%, 37% 14%);
       transform: rotate(12deg);
       opacity: 0;
-      /* Initial animation - will be cleaned up by JS to prevent hover-reset */
+      /* Initial animation */
       animation: sticker-wobble-diff 4s infinite ease-in-out, fadeIn 1s ease-in-out 1.2s forwards;
       font-family: inherit;
       transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* The actual star shape and background */
+    .sticker-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      clip-path: polygon(50% 0%, 61% 16%, 80% 10%, 83% 29%, 100% 35%, 91% 52%, 100% 68%, 82% 73%, 78% 92%, 59% 86%, 50% 100%, 38% 85%, 20% 90%, 16% 72%, 0% 66%, 8% 50%, 0% 34%, 15% 26%, 18% 8%, 37% 14%);
+      z-index: 1; /* Behind the text */
     }
 
     /* Clean state after initial fade-in */
@@ -281,7 +295,6 @@
     .sticker-btn:hover {
       transform: scale(1.1) rotate(0deg);
       filter: drop-shadow(0 0 20px rgb(255, 255, 255));
-      /* We pause the wobble on hover for better readability */
       animation-play-state: paused;
       opacity: 1 !important;
     }

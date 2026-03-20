@@ -396,7 +396,7 @@
 </head>
 
 <body>
-  <video class="background-video" autoplay muted loop playsinline preload="auto">
+  <video class="background-video" autoplay loop playsinline preload="auto">
     <source src="media/videos/1020 footage.mp4" type="video/mp4" />
   </video>
 
@@ -449,6 +449,26 @@
     const logo = document.getElementById('logo');
     const video = document.querySelector('.background-video');
     const magnifier = document.getElementById('magnifier');
+    
+    // Audio Context Setup
+    let audioCtx;
+    let source;
+    let lowpassFilter;
+
+    function initAudio() {
+      if (audioCtx) return;
+      
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      source = audioCtx.createMediaElementSource(video);
+      lowpassFilter = audioCtx.createBiquadFilter();
+      
+      lowpassFilter.type = 'lowpass';
+      lowpassFilter.frequency.setValueAtTime(800, audioCtx.currentTime); // Lo-fi muffle effect
+      lowpassFilter.Q.setValueAtTime(1, audioCtx.currentTime);
+
+      source.connect(lowpassFilter);
+      lowpassFilter.connect(audioCtx.destination);
+    }
     
     // Fallback-Videos für den Fall, dass die GitHub API nicht erreicht wird
     let videoSources = [
@@ -519,6 +539,13 @@
     });
 
     document.addEventListener('click', () => {
+      // Initialize or resume AudioContext on first interaction
+      if (!audioCtx) {
+        initAudio();
+      } else if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
       magnifier.style.transition = 'transform 0.15s ease-out';
       magnifier.style.transform = 'scale(0.5)';
       setTimeout(() => {

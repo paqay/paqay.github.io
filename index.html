@@ -70,9 +70,13 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Improved from fill */
+      object-fit: cover;
       filter: blur(10px) brightness(1);
+      transition: opacity 1s ease-in-out;
     }
+
+    #videoA { z-index: 1; opacity: 1; }
+    #videoB { z-index: 0; opacity: 0; }
 
     .logo {
       width: 95%;
@@ -442,8 +446,11 @@
 </head>
 
 <body>
-  <video class="background-video" autoplay muted loop playsinline preload="auto">
+  <video id="videoA" class="background-video" autoplay muted loop playsinline preload="auto">
     <source src="media/videos/1020 footage.mp4" type="video/mp4" />
+  </video>
+  <video id="videoB" class="background-video" muted loop playsinline preload="auto" style="opacity: 0;">
+    <source src="" type="video/mp4" />
   </video>
 
   <div class="content">
@@ -498,35 +505,52 @@
       }
     }
 
+    const videoA = document.getElementById('videoA');
+    const videoB = document.getElementById('videoB');
+    let activeVideo = videoA;
+    let nextVideo = videoB;
+
     const logo = document.getElementById('logo');
-    const video = document.querySelector('.background-video');
     const magnifier = document.getElementById('magnifier');
     
     // Audio Context Setup
     let audioCtx;
-    let source;
+    let sourceA, sourceB;
+    let gainA, gainB;
     let lowpassFilter;
-    let gainNode;
+    let masterGain;
     let isMuted = true;
 
     function initAudio() {
       if (audioCtx) return;
       
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      source = audioCtx.createMediaElementSource(video);
-      lowpassFilter = audioCtx.createBiquadFilter();
-      gainNode = audioCtx.createGain();
       
+      sourceA = audioCtx.createMediaElementSource(videoA);
+      sourceB = audioCtx.createMediaElementSource(videoB);
+      
+      lowpassFilter = audioCtx.createBiquadFilter();
       lowpassFilter.type = 'lowpass';
       lowpassFilter.frequency.setValueAtTime(800, audioCtx.currentTime);
       lowpassFilter.Q.setValueAtTime(1, audioCtx.currentTime);
 
-      source.connect(lowpassFilter);
-      lowpassFilter.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
+      gainA = audioCtx.createGain();
+      gainB = audioCtx.createGain();
+      masterGain = audioCtx.createGain();
+
+      // Default volume targets (0.7 as per user preference)
+      gainA.gain.setValueAtTime(isMuted ? 0 : 0.7, audioCtx.currentTime);
+      gainB.gain.setValueAtTime(0, audioCtx.currentTime);
+      masterGain.gain.setValueAtTime(1, audioCtx.currentTime);
+
+      sourceA.connect(gainA);
+      sourceB.connect(gainB);
       
-      // Default volume restored to 1.0 (normal)
-      gainNode.gain.setValueAtTime(isMuted ? 0 : 0.7, audioCtx.currentTime);
+      gainA.connect(lowpassFilter);
+      gainB.connect(lowpassFilter);
+      
+      lowpassFilter.connect(masterGain);
+      masterGain.connect(audioCtx.destination);
     }
 
     const muteBtn = document.getElementById('mute-btn');
@@ -542,17 +566,17 @@
     function toggleMute() {
       if (!audioCtx) initAudio();
       
-      // Ensure AudioContext is running
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
       
       isMuted = !isMuted;
-      video.muted = isMuted;
+      // Sync both videos
+      videoA.muted = isMuted;
+      videoB.muted = isMuted;
 
-      if (gainNode) {
-        // Transition to 0 or 1 for smoothness
-        gainNode.gain.setTargetAtTime(isMuted ? 0 : 1, audioCtx.currentTime, 0.05);
+      if (masterGain) {
+        masterGain.gain.setTargetAtTime(isMuted ? 0 : 1, audioCtx.currentTime, 0.1);
       }
       muteBtn.innerHTML = isMuted ? mutedIcon : muteIcon;
     }
@@ -597,16 +621,14 @@
     }
 
     function playRandomVideo() {
-      // Wähle einen zufälligen Index aus
       const randomIndex = Math.floor(Math.random() * videoSources.length);
       currentVideoIndex = randomIndex;
       
-      const source = video.querySelector('source');
-      // Nicht neu laden, falls es bereits das richtige ist (spart Ladezeit)
+      const source = activeVideo.querySelector('source');
       if (source.getAttribute('src') !== videoSources[currentVideoIndex]) {
         source.src = videoSources[currentVideoIndex];
-        video.load();
-        video.play().catch(e => console.log('Autoplay blockiert:', e));
+        activeVideo.load();
+        activeVideo.play().catch(e => console.log('Autoplay blockiert:', e));
       }
     }
 
@@ -614,13 +636,38 @@
     loadDynamicVideos();
 
     function switchVideo() {
-      const currentTime = video.currentTime;
+      if (!audioCtx) initAudio();
+
       currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
-      video.querySelector('source').src = videoSources[currentVideoIndex];
-      video.load();
-      video.addEventListener('loadeddata', () => {
-        video.currentTime = currentTime;
-        video.play().catch(() => {});
+      
+      // Load into hidden video
+      nextVideo.querySelector('source').src = videoSources[currentVideoIndex];
+      nextVideo.load();
+      
+      // Reset muted state for the new video buffer
+      nextVideo.muted = isMuted;
+
+      nextVideo.addEventListener('canplaythrough', () => {
+        nextVideo.play().catch(() => {});
+        
+        // Transition settings
+        const duration = 1.0; // seconds
+        const currentGain = activeVideo === videoA ? gainA : gainB;
+        const targetGain = nextVideo === videoA ? gainA : gainB;
+
+        // Cross-fade Audio
+        if (audioCtx) {
+          const now = audioCtx.currentTime;
+          currentGain.gain.setTargetAtTime(0, now, 0.3);
+          targetGain.gain.setTargetAtTime(isMuted ? 0 : 0.7, now, 0.3);
+        }
+
+        // Cross-fade Video Visually
+        activeVideo.style.opacity = 0;
+        nextVideo.style.opacity = 1;
+        
+        // Swap roles
+        [activeVideo, nextVideo] = [nextVideo, activeVideo];
       }, { once: true });
     }
 

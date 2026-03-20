@@ -221,15 +221,26 @@
     .drumkit-btn:hover {
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.5);
-      transform: translateY(-3px);
+      transform: translateY(-3px) scale(1.05);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .drumkit-btn {
+        bottom: 30px;
+        right: 30px;
+        padding: 10px 22px;
+        font-size: 16px;
+      }
     }
 
     @media (max-width: 480px) {
       .drumkit-btn {
-        bottom: 20px;
+        bottom: 120px; /* Abgehoben von der unteren Ecke für bessere Daumen-Erreichbarkeit */
         right: 20px;
-        padding: 10px 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        letter-spacing: 2px;
       }
     }
 
@@ -254,17 +265,25 @@
       text-decoration: none;
       clip-path: polygon(50% 0%, 61% 16%, 80% 10%, 83% 29%, 100% 35%, 91% 52%, 100% 68%, 82% 73%, 78% 92%, 59% 86%, 50% 100%, 38% 85%, 20% 90%, 16% 72%, 0% 66%, 8% 50%, 0% 34%, 15% 26%, 18% 8%, 37% 14%);
       transform: rotate(12deg);
-      animation: sticker-wobble-diff 4s infinite ease-in-out, fadeIn 1s ease-in-out 1.2s forwards;
       opacity: 0;
+      /* Initial animation - will be cleaned up by JS to prevent hover-reset */
+      animation: sticker-wobble-diff 4s infinite ease-in-out, fadeIn 1s ease-in-out 1.2s forwards;
       font-family: inherit;
+      transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Clean state after initial fade-in */
+    .sticker-btn.ready {
+      opacity: 1;
+      animation: sticker-wobble-diff 4s infinite ease-in-out;
     }
 
     .sticker-btn:hover {
       transform: scale(1.1) rotate(0deg);
-      animation: none;
-      opacity: 1;
       filter: drop-shadow(0 0 20px rgb(255, 255, 255));
-      transition: all 0.3s ease;
+      /* We pause the wobble on hover for better readability */
+      animation-play-state: paused;
+      opacity: 1 !important;
     }
 
     .sticker-btn span {
@@ -289,12 +308,15 @@
       .sticker-btn {
         top: 20px;
         right: 20px;
-        width: 110px;
-        height: 110px;
-        font-size: 16px;
+        width: 100px;
+        height: 100px;
+        font-size: 14px;
       }
       .sticker-btn .small {
-        font-size: 10px;
+        font-size: 9px;
+      }
+      .logo {
+        width: 85%; /* Etwas kleiner auf Mobile */
       }
     }
   </style>
@@ -430,6 +452,14 @@
         magnifier.style.transform = 'scale(1)';
       }, 150);
     });
+
+    // Sticker Button Animation Cleanup to prevent hover-reset
+    const stickerBtn = document.querySelector('.sticker-btn');
+    if (stickerBtn) {
+      setTimeout(() => {
+        stickerBtn.classList.add('ready');
+      }, 2500); // 1.2s delay + 1s duration + 0.3s buffer
+    }
   </script>
   <a href="Drumkit.html" class="drumkit-btn">Drumkit</a>
   <a href="/tickets" class="sticker-btn">

@@ -524,8 +524,8 @@
       lowpassFilter.connect(gainNode);
       gainNode.connect(audioCtx.destination);
       
-      // Default volume set to 0.3 (quieter)
-      gainNode.gain.setValueAtTime(isMuted ? 0 : 0.3, audioCtx.currentTime);
+      // Default volume restored to 1.0 (normal)
+      gainNode.gain.setValueAtTime(isMuted ? 0 : 1, audioCtx.currentTime);
     }
 
     const muteBtn = document.getElementById('mute-btn');

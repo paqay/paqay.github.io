@@ -61,6 +61,7 @@
       height: 100%;
       font-family: Arial, sans-serif;
       overflow: hidden;
+      background: #000; /* Fixes white flash during video switch */
     }
 
     .background-video {
@@ -69,7 +70,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: fill;
+      object-fit: cover; /* Improved from fill */
       filter: blur(10px) brightness(1);
     }
 

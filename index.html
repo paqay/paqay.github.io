@@ -525,7 +525,7 @@
       gainNode.connect(audioCtx.destination);
       
       // Default volume restored to 1.0 (normal)
-      gainNode.gain.setValueAtTime(isMuted ? 0 : 1, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(isMuted ? 0 : 0.7, audioCtx.currentTime);
     }
 
     const muteBtn = document.getElementById('mute-btn');

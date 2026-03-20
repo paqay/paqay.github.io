@@ -72,11 +72,12 @@
       height: 100%;
       object-fit: cover;
       filter: blur(10px) brightness(1);
-      transition: opacity 1s ease-in-out;
+      transition: opacity 0.4s ease-in-out; /* Faster transition */
+      pointer-events: none; /* Never block UI clicks */
     }
 
-    #videoA { z-index: 1; opacity: 1; }
-    #videoB { z-index: 0; opacity: 0; }
+    #videoA { opacity: 1; }
+    #videoB { opacity: 0; }
 
     .logo {
       width: 95%;
@@ -111,8 +112,7 @@
     }
 
     .content {
-      position: relative; /* Ensure it stays above absolute videos */
-      z-index: 10;
+      position: relative; 
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -653,15 +653,15 @@
         nextVideo.play().catch(() => {});
         
         // Transition settings
-        const duration = 1.0; // seconds
+        const duration = 0.4; // seconds (Faster)
         const currentGain = activeVideo === videoA ? gainA : gainB;
         const targetGain = nextVideo === videoA ? gainA : gainB;
 
         // Cross-fade Audio
         if (audioCtx) {
           const now = audioCtx.currentTime;
-          currentGain.gain.setTargetAtTime(0, now, 0.3);
-          targetGain.gain.setTargetAtTime(isMuted ? 0 : 0.7, now, 0.3);
+          currentGain.gain.setTargetAtTime(0, now, 0.1);
+          targetGain.gain.setTargetAtTime(isMuted ? 0 : 0.7, now, 0.1);
         }
 
         // Cross-fade Video Visually

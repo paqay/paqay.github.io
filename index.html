@@ -544,8 +544,8 @@
       
       isMuted = !isMuted;
       if (gainNode) {
-        // Transition to 0 or 0.3 for smoothness
-        gainNode.gain.setTargetAtTime(isMuted ? 0 : 0.3, audioCtx.currentTime, 0.05);
+        // Transition to 0 or 1 for smoothness
+        gainNode.gain.setTargetAtTime(isMuted ? 0 : 1, audioCtx.currentTime, 0.05);
       }
       muteBtn.innerHTML = isMuted ? mutedIcon : muteIcon;
     });

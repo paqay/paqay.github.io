@@ -244,6 +244,66 @@
       }
     }
 
+    .contact-btn {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      z-index: 20;
+      padding: 12px 28px;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      transition: all 0.4s ease;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out 1.1s forwards; /* Slightly delayed compared to drumkit */
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contact-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .contact-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    @media (max-width: 768px) {
+      .contact-btn {
+        bottom: 30px;
+        left: 30px;
+        padding: 10px 22px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-btn {
+        bottom: 20px;
+        left: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        letter-spacing: 2px;
+      }
+      .contact-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
     /* Ticket Sticker Styles */
     .sticker-btn {
       position: absolute;
@@ -475,6 +535,12 @@
     }
   </script>
   <a href="Drumkit.html" class="drumkit-btn">Drumkit</a>
+  <a href="mailto:paqayoffice@gmail.com" class="contact-btn">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V8L12 13L20 8V18ZM12 11L4 6H20L12 11Z"/>
+    </svg>
+    Contact
+  </a>
   <a href="/tickets" class="sticker-btn">
     <span class="small">Live</span>
     <span>TICKETS</span>

@@ -542,7 +542,14 @@
       e.stopPropagation(); // Prevent magnifier click
       if (!audioCtx) initAudio();
       
+      // Ensure AudioContext is running
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      
       isMuted = !isMuted;
+      video.muted = isMuted;
+
       if (gainNode) {
         // Transition to 0 or 1 for smoothness
         gainNode.gain.setTargetAtTime(isMuted ? 0 : 1, audioCtx.currentTime, 0.05);

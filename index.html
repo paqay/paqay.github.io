@@ -524,7 +524,8 @@
       lowpassFilter.connect(gainNode);
       gainNode.connect(audioCtx.destination);
       
-      if (isMuted) gainNode.gain.value = 0;
+      // Default volume set to 0.3 (quieter)
+      gainNode.gain.setValueAtTime(isMuted ? 0 : 0.3, audioCtx.currentTime);
     }
 
     const muteBtn = document.getElementById('mute-btn');
@@ -543,7 +544,8 @@
       
       isMuted = !isMuted;
       if (gainNode) {
-        gainNode.gain.setTargetAtTime(isMuted ? 0 : 1, audioCtx.currentTime, 0.05);
+        // Transition to 0 or 0.3 for smoothness
+        gainNode.gain.setTargetAtTime(isMuted ? 0 : 0.3, audioCtx.currentTime, 0.05);
       }
       muteBtn.innerHTML = isMuted ? mutedIcon : muteIcon;
     });
@@ -616,20 +618,25 @@
       magnifier.style.top = `${e.clientY - 75}px`;
     });
 
-    document.addEventListener('click', () => {
-      // Initialize or resume AudioContext on first interaction
+    const handleInteraction = () => {
       if (!audioCtx) {
         initAudio();
       } else if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
+    };
 
+    document.addEventListener('click', () => {
+      handleInteraction();
       magnifier.style.transition = 'transform 0.15s ease-out';
       magnifier.style.transform = 'scale(0.5)';
       setTimeout(() => {
         magnifier.style.transform = 'scale(1)';
       }, 150);
     });
+
+    document.addEventListener('touchstart', handleInteraction, { once: true });
+    window.addEventListener('scroll', handleInteraction, { once: true });
 
     // Sticker Button Animation Cleanup to prevent hover-reset
     const stickerBtn = document.querySelector('.sticker-btn');

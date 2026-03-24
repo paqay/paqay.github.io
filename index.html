@@ -518,6 +518,7 @@
     const videoB = document.getElementById('videoB');
     let activeVideo = videoA;
     let nextVideo = videoB;
+    const sessionStartTime = Date.now() / 1000;
 
     const logo = document.getElementById('logo');
     const magnifier = document.getElementById('magnifier');
@@ -657,26 +658,32 @@
       nextVideo.muted = isMuted;
 
       nextVideo.addEventListener('canplaythrough', () => {
-        nextVideo.play().catch(() => {});
-        
-        // Transition settings
-        const duration = 0.4; // seconds (Faster)
-        const currentGain = activeVideo === videoA ? gainA : gainB;
-        const targetGain = nextVideo === videoA ? gainA : gainB;
+        // Sync time to "continue running"
+        const elapsedTime = (Date.now() / 1000) - sessionStartTime;
+        nextVideo.currentTime = elapsedTime % nextVideo.duration;
 
-        // Cross-fade Audio
-        if (audioCtx) {
-          const now = audioCtx.currentTime;
-          currentGain.gain.setTargetAtTime(0, now, 0.1);
-          targetGain.gain.setTargetAtTime(isMuted ? 0 : 0.7, now, 0.1);
-        }
+        nextVideo.addEventListener('seeked', () => {
+          nextVideo.play().catch(() => {});
+          
+          // Transition settings
+          const duration = 0.4; // seconds (Faster)
+          const currentGain = activeVideo === videoA ? gainA : gainB;
+          const targetGain = nextVideo === videoA ? gainA : gainB;
 
-        // Cross-fade Video Visually
-        activeVideo.style.opacity = 0;
-        nextVideo.style.opacity = 1;
-        
-        // Swap roles
-        [activeVideo, nextVideo] = [nextVideo, activeVideo];
+          // Cross-fade Audio
+          if (audioCtx) {
+            const now = audioCtx.currentTime;
+            currentGain.gain.setTargetAtTime(0, now, 0.1);
+            targetGain.gain.setTargetAtTime(isMuted ? 0 : 0.7, now, 0.1);
+          }
+
+          // Cross-fade Video Visually
+          activeVideo.style.opacity = 0;
+          nextVideo.style.opacity = 1;
+          
+          // Swap roles
+          [activeVideo, nextVideo] = [nextVideo, activeVideo];
+        }, { once: true });
       }, { once: true });
     }
 

@@ -644,10 +644,10 @@
     // Beim Laden der Seite nach Videos suchen
     loadDynamicVideos();
 
-    function switchVideo() {
+    function switchVideo(direction = 1) {
       if (!audioCtx) initAudio();
 
-      currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
+      currentVideoIndex = (currentVideoIndex + direction + videoSources.length) % videoSources.length;
       
       // Load into hidden video
       nextVideo.querySelector('source').src = videoSources[currentVideoIndex];
@@ -720,6 +720,10 @@
       } else if (e.key === ' ') {
         e.preventDefault(); // Prevent page scroll
         switchVideo();
+      } else if (e.key === 'ArrowRight') {
+        switchVideo(1);
+      } else if (e.key === 'ArrowLeft') {
+        switchVideo(-1);
       }
     });
 

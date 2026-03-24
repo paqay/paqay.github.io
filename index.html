@@ -276,10 +276,15 @@
     }
 
     .contact-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .contact-btn.copied {
+      background: rgba(255, 255, 255, 0.4);
+      border-color: #fff;
     }
 
     .contact-btn svg {
@@ -723,13 +728,28 @@
         stickerBtn.classList.add('ready');
       }, 2500); // 1.2s delay + 1s duration + 0.3s buffer
     }
+
+    function copyEmailToClipboard(email, btnElement) {
+      navigator.clipboard.writeText(email).then(() => {
+        const span = btnElement.querySelector('span');
+        const originalText = span.textContent;
+        span.textContent = 'Copied!';
+        btnElement.classList.add('copied');
+        setTimeout(() => {
+          span.textContent = originalText;
+          btnElement.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
   </script>
   <a href="Drumkit.html" class="drumkit-btn">Drumkit</a>
-  <a href="mailto:paqayoffice@gmail.com" class="contact-btn">
+  <a href="javascript:void(0)" onclick="copyEmailToClipboard('paqayoffice@gmail.com', this)" class="contact-btn">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V8L12 13L20 8V18ZM12 11L4 6H20L12 11Z"/>
     </svg>
-    Contact
+    <span>Contact</span>
   </a>
   <a href="/tickets" class="sticker-btn">
     <span class="small">Live</span>

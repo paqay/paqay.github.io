@@ -714,6 +714,19 @@
       );
     }
 
+    function triggerBackgroundSpaceFeedback() {
+      if (!activeVideo || typeof activeVideo.animate !== 'function') return;
+
+      activeVideo.animate(
+        [
+          { transform: 'scale(1)', filter: 'blur(10px) brightness(1)' },
+          { transform: 'scale(1.015)', filter: 'blur(11px) brightness(1.08)', offset: 0.5 },
+          { transform: 'scale(1)', filter: 'blur(10px) brightness(1)' }
+        ],
+        { duration: 260, easing: 'ease-out' }
+      );
+    }
+
     document.addEventListener('mousemove', (e) => {
       magnifier.style.left = `${e.clientX - 75}px`;
       magnifier.style.top = `${e.clientY - 75}px`;
@@ -749,6 +762,7 @@
       } else if (e.key === ' ') {
         e.preventDefault(); // Prevent page scroll
         triggerLogoSpaceFeedback();
+        triggerBackgroundSpaceFeedback();
         switchVideo();
       } else if (e.key === 'ArrowRight') {
         switchVideo(1);

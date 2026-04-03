@@ -23,6 +23,7 @@
   <!-- <meta property="og:image" content="https://paqay.cc/media/STICKER_4.jpg" /> -->
   <meta property="og:image" content="https://paqay.cc/media/og_cover.jpg" />
   <meta property="og:site_name" content="paqay" />
+  <meta property="og:locale" content="de_AT" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
@@ -31,7 +32,8 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="paqay – Rapper, Musikproduzent & Künstler aus Wien" />
   <meta name="twitter:description" content="Entdecke die Musik von paqay – HipHop, Beats, Sounddesign und mehr." />
-  <meta name="twitter:image" content="https://paqay.cc/media/spoti_pb_2.jpg" />
+  <meta name="twitter:image" content="https://paqay.cc/media/og_cover.jpg" />
+  <meta name="twitter:url" content="https://paqay.cc" />
 
   <!-- Resource Hints -->
   <link rel="preconnect" href="https://api.github.com">
@@ -55,11 +57,16 @@
       ],
       "jobTitle": "Musikproduzent",
       "description": "paqay ist ein Rapper und Musikproduzent aus Wien mit Fokus auf elektronische Klangwelten.",
-      "image": "https://paqay.cc/media/spoti pb 2.jpg"
+      "image": "https://paqay.cc/media/og_cover.jpg"
     }
   </script>
 
   <style>
+    :root {
+      --bg-blur: 10px;
+      --bg-brightness: 1;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -81,7 +88,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: blur(10px) brightness(1);
+      filter: blur(var(--bg-blur)) brightness(var(--bg-brightness));
       transition: opacity 0.4s ease-in-out; /* Faster transition */
       pointer-events: none; /* Never block UI clicks */
     }
@@ -157,6 +164,13 @@
       }
     }
 
+    @media (max-width: 768px) {
+      :root {
+        --bg-blur: 8px;
+        --bg-brightness: 0.98;
+      }
+    }
+
     @media (max-width: 480px) {
       .social-icons {
         gap: 20px;
@@ -193,6 +207,55 @@
       pointer-events: none;
       z-index: 11;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .video-status {
+      position: absolute;
+      top: 92px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 120;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      letter-spacing: 0.6px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .video-status.visible {
+      opacity: 1;
+    }
+
+    .keyboard-hint {
+      position: absolute;
+      bottom: 95px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 120;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.4px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .keyboard-hint.visible {
+      opacity: 1;
     }
 
     @media (hover: none) and (pointer: coarse) {
@@ -495,6 +558,8 @@
   </div>
 
   <div class="magnifier" id="magnifier"></div>
+  <div class="video-status" id="video-status" role="status" aria-live="polite"></div>
+  <div class="keyboard-hint" id="keyboard-hint">Space: Next Video • ←/→: Browse • M: Mute</div>
 
   <button class="mute-btn" id="mute-btn" aria-label="Mute Toggle">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -530,6 +595,13 @@
 
     const logo = document.getElementById('logo');
     const magnifier = document.getElementById('magnifier');
+    const videoStatus = document.getElementById('video-status');
+    const keyboardHint = document.getElementById('keyboard-hint');
+    const VIDEO_CACHE_KEY = 'paqay_video_sources_v1';
+    const VIDEO_CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+    const SHORTCUT_HINT_KEY = 'paqay_shortcuts_hint_seen_v1';
+    const PRELOAD_AHEAD_COUNT = 2;
+    const preloadedSources = new Set();
     
     // Audio Context Setup
     let audioCtx;
@@ -538,6 +610,105 @@
     let lowpassFilter;
     let masterGain;
     let isMuted = true;
+    let isSwitchingVideo = false;
+
+    function trackEvent(eventName, props = {}) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', eventName, props);
+      }
+      if (typeof window.plausible === 'function') {
+        window.plausible(eventName, { props });
+      }
+      try {
+        const metrics = JSON.parse(localStorage.getItem('paqay_metrics') || '{}');
+        metrics[eventName] = (metrics[eventName] || 0) + 1;
+        localStorage.setItem('paqay_metrics', JSON.stringify(metrics));
+      } catch (error) {
+        console.warn('Metrics konnten nicht gespeichert werden:', error);
+      }
+    }
+
+    function setVideoStatus(message, isError = false, timeoutMs = 2600) {
+      if (!videoStatus) return;
+      videoStatus.textContent = message;
+      videoStatus.style.borderColor = isError ? 'rgba(255, 120, 120, 0.8)' : 'rgba(255, 255, 255, 0.3)';
+      videoStatus.classList.add('visible');
+      window.clearTimeout(setVideoStatus._timeoutId);
+      setVideoStatus._timeoutId = window.setTimeout(() => {
+        videoStatus.classList.remove('visible');
+      }, timeoutMs);
+    }
+
+    function applyPerformanceProfile() {
+      const rootStyle = document.documentElement.style;
+      const prefersDataSaver = navigator.connection && navigator.connection.saveData;
+      const lowPowerDevice = (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+      const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
+
+      if (prefersDataSaver || lowPowerDevice || isSmallScreen) {
+        rootStyle.setProperty('--bg-blur', '8px');
+        rootStyle.setProperty('--bg-brightness', '0.98');
+      } else {
+        rootStyle.setProperty('--bg-blur', '10px');
+        rootStyle.setProperty('--bg-brightness', '1');
+      }
+    }
+
+    function showKeyboardHintOnce() {
+      if (!keyboardHint) return;
+      try {
+        if (localStorage.getItem(SHORTCUT_HINT_KEY) === '1') return;
+        window.setTimeout(() => {
+          keyboardHint.classList.add('visible');
+          window.setTimeout(() => {
+            keyboardHint.classList.remove('visible');
+          }, 5000);
+        }, 1400);
+        localStorage.setItem(SHORTCUT_HINT_KEY, '1');
+      } catch (error) {
+        console.warn('Shortcut Hint konnte nicht gespeichert werden:', error);
+      }
+    }
+
+    function readCachedVideoSources() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(VIDEO_CACHE_KEY) || 'null');
+        if (!cached || !Array.isArray(cached.sources) || !cached.savedAt) return null;
+        if (Date.now() - cached.savedAt > VIDEO_CACHE_MAX_AGE_MS) return null;
+        return cached.sources.filter(src => typeof src === 'string' && src.endsWith('.mp4'));
+      } catch (error) {
+        console.warn('Video-Cache konnte nicht gelesen werden:', error);
+        return null;
+      }
+    }
+
+    function writeCachedVideoSources(sources) {
+      try {
+        localStorage.setItem(VIDEO_CACHE_KEY, JSON.stringify({
+          sources,
+          savedAt: Date.now()
+        }));
+      } catch (error) {
+        console.warn('Video-Cache konnte nicht gespeichert werden:', error);
+      }
+    }
+
+    function preloadUpcomingVideos() {
+      if (videoSources.length < 2) return;
+      for (let offset = 1; offset <= PRELOAD_AHEAD_COUNT; offset += 1) {
+        const preloadIndex = (currentVideoIndex + offset) % videoSources.length;
+        const preloadSrc = videoSources[preloadIndex];
+        if (!preloadSrc || preloadedSources.has(preloadSrc)) continue;
+
+        const preloadVideo = document.createElement('video');
+        preloadVideo.preload = 'metadata';
+        preloadVideo.muted = true;
+        preloadVideo.src = preloadSrc;
+        preloadVideo.load();
+        preloadedSources.add(preloadSrc);
+      }
+    }
 
     function initAudio() {
       if (audioCtx) return;
@@ -597,6 +768,7 @@
         masterGain.gain.setTargetAtTime(isMuted ? 0 : 1, audioCtx.currentTime, 0.1);
       }
       muteBtn.innerHTML = isMuted ? mutedIcon : muteIcon;
+      trackEvent('mute_toggle', { muted: isMuted });
     }
 
     muteBtn.addEventListener('click', (e) => {
@@ -612,30 +784,40 @@
     let currentVideoIndex = 0;
 
     // Funktion um Videos dynamisch aus dem 'media' Ordner zu laden
-    function loadDynamicVideos() {
-      fetch('https://api.github.com/repos/paqay/paqay.github.io/contents/media/videos')
-        .then(response => {
-          if (!response.ok) throw new Error('GitHub API Error oder Rate Limit');
-          return response.json();
-        })
-        .then(files => {
-          // Alle .mp4 Dateien herausfiltern (nur direkte Dateien, keine Unterordner)
-          const mp4Files = files
-            .filter(file => file.type === 'file' && file.name.endsWith('.mp4'))
-            .map(file => "media/videos/" + file.name);
-          
-          if (mp4Files.length > 0) {
-            videoSources = mp4Files;
-          }
-          
-          // Zufälliges Video zum Start wählen
+    async function loadDynamicVideos() {
+      const cachedSources = readCachedVideoSources();
+      if (cachedSources && cachedSources.length > 0) {
+        videoSources = cachedSources;
+        playRandomVideo();
+        preloadUpcomingVideos();
+      }
+
+      try {
+        const response = await fetch('https://api.github.com/repos/paqay/paqay.github.io/contents/media/videos');
+        if (!response.ok) throw new Error('GitHub API Error oder Rate Limit');
+
+        const files = await response.json();
+        const mp4Files = files
+          .filter(file => file.type === 'file' && file.name.endsWith('.mp4'))
+          .map(file => "media/videos/" + file.name);
+
+        if (mp4Files.length > 0) {
+          videoSources = mp4Files;
+          writeCachedVideoSources(mp4Files);
+        }
+
+        if (!cachedSources || cachedSources.length === 0) {
           playRandomVideo();
-        })
-        .catch(error => {
-          console.warn('Nutze Video-Fallback:', error);
-          // Zufälliges Fallback-Video wählen
+        }
+        preloadUpcomingVideos();
+      } catch (error) {
+        console.warn('Nutze Video-Fallback:', error);
+        if (!cachedSources || cachedSources.length === 0) {
           playRandomVideo();
-        });
+          preloadUpcomingVideos();
+        }
+        setVideoStatus('Video-Liste offline – Fallback aktiv', true, 3400);
+      }
     }
 
     function playRandomVideo() {
@@ -648,6 +830,7 @@
         activeVideo.load();
         activeVideo.play().catch(e => console.log('Autoplay blockiert:', e));
       }
+      preloadUpcomingVideos();
     }
 
     // Beim Laden der Seite nach Videos suchen
@@ -655,20 +838,36 @@
 
     function switchVideo(direction = 1) {
       if (!audioCtx) initAudio();
+      if (isSwitchingVideo || videoSources.length === 0) return;
 
-      currentVideoIndex = (currentVideoIndex + direction + videoSources.length) % videoSources.length;
+      isSwitchingVideo = true;
+      const targetVideoIndex = (currentVideoIndex + direction + videoSources.length) % videoSources.length;
       
       // Load into hidden video
-      nextVideo.querySelector('source').src = videoSources[currentVideoIndex];
+      nextVideo.querySelector('source').src = videoSources[targetVideoIndex];
       nextVideo.load();
       
       // Reset muted state for the new video buffer
       nextVideo.muted = isMuted;
 
+      const switchTimeout = window.setTimeout(() => {
+        isSwitchingVideo = false;
+        setVideoStatus('Video konnte nicht geladen werden', true, 3200);
+      }, 5000);
+
+      nextVideo.addEventListener('error', () => {
+        window.clearTimeout(switchTimeout);
+        isSwitchingVideo = false;
+        setVideoStatus('Video konnte nicht geladen werden', true, 3200);
+      }, { once: true });
+
       nextVideo.addEventListener('canplaythrough', () => {
+        window.clearTimeout(switchTimeout);
         // Sync time to "continue running"
         const elapsedTime = (Date.now() / 1000) - sessionStartTime;
-        nextVideo.currentTime = elapsedTime % nextVideo.duration;
+        nextVideo.currentTime = Number.isFinite(nextVideo.duration) && nextVideo.duration > 0
+          ? elapsedTime % nextVideo.duration
+          : 0;
 
         nextVideo.addEventListener('seeked', () => {
           nextVideo.play().catch(() => {});
@@ -691,12 +890,16 @@
           
           // Swap roles
           [activeVideo, nextVideo] = [nextVideo, activeVideo];
+          currentVideoIndex = targetVideoIndex;
+          isSwitchingVideo = false;
+          preloadUpcomingVideos();
         }, { once: true });
       }, { once: true });
     }
 
     // Beim Klicken aufs Logo weiterhin durchschalten
     logo.addEventListener('click', () => {
+      trackEvent('video_switch_logo_click');
       switchVideo();
     });
 
@@ -716,12 +919,15 @@
 
     function triggerBackgroundSpaceFeedback() {
       if (!activeVideo || typeof activeVideo.animate !== 'function') return;
+      const rootStyles = getComputedStyle(document.documentElement);
+      const baseBlur = rootStyles.getPropertyValue('--bg-blur').trim() || '10px';
+      const baseBrightness = rootStyles.getPropertyValue('--bg-brightness').trim() || '1';
 
       activeVideo.animate(
         [
-          { transform: 'scale(1)', filter: 'blur(10px) brightness(1)' },
+          { transform: 'scale(1)', filter: `blur(${baseBlur}) brightness(${baseBrightness})` },
           { transform: 'scale(1.03)', filter: 'blur(12.5px) brightness(1.2)', offset: 0.5 },
-          { transform: 'scale(1)', filter: 'blur(10px) brightness(1)' }
+          { transform: 'scale(1)', filter: `blur(${baseBlur}) brightness(${baseBrightness})` }
         ],
         { duration: 320, easing: 'ease-out' }
       );
@@ -763,6 +969,7 @@
         e.preventDefault(); // Prevent page scroll
         triggerLogoSpaceFeedback();
         triggerBackgroundSpaceFeedback();
+        trackEvent('video_switch_space');
         switchVideo();
       } else if (e.key === 'ArrowRight') {
         switchVideo(1);
@@ -771,6 +978,13 @@
       }
     });
 
+    const ticketBtn = document.querySelector('.sticker-btn');
+    if (ticketBtn) {
+      ticketBtn.addEventListener('click', () => {
+        trackEvent('tickets_click');
+      });
+    }
+
     // Sticker Button Animation Cleanup to prevent hover-reset
     const stickerBtn = document.querySelector('.sticker-btn');
     if (stickerBtn) {
@@ -778,6 +992,10 @@
         stickerBtn.classList.add('ready');
       }, 2500); // 1.2s delay + 1s duration + 0.3s buffer
     }
+
+    applyPerformanceProfile();
+    showKeyboardHintOnce();
+    window.addEventListener('resize', applyPerformanceProfile);
 
     function copyEmailToClipboard(email, btnElement) {
       navigator.clipboard.writeText(email).then(() => {

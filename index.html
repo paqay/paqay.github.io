@@ -700,6 +700,20 @@
       switchVideo();
     });
 
+    function triggerLogoSpaceFeedback() {
+      if (!logo || typeof logo.animate !== 'function') return;
+
+      logo.animate(
+        [
+          { transform: 'scale(1)', opacity: 1 },
+          { transform: 'scale(0.97)', opacity: 0.9, offset: 0.35 },
+          { transform: 'scale(1.02)', opacity: 1, offset: 0.7 },
+          { transform: 'scale(1)', opacity: 1 }
+        ],
+        { duration: 220, easing: 'ease-out' }
+      );
+    }
+
     document.addEventListener('mousemove', (e) => {
       magnifier.style.left = `${e.clientX - 75}px`;
       magnifier.style.top = `${e.clientY - 75}px`;
@@ -734,6 +748,7 @@
         toggleMute();
       } else if (e.key === ' ') {
         e.preventDefault(); // Prevent page scroll
+        triggerLogoSpaceFeedback();
         switchVideo();
       } else if (e.key === 'ArrowRight') {
         switchVideo(1);

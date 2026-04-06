@@ -506,6 +506,108 @@
       display: none !important;
     }
 
+    .diploma-menu {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      z-index: 140;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out 1.2s forwards;
+    }
+
+    .diploma-trigger {
+      width: 126px;
+      height: 150px;
+      border: none;
+      position: relative;
+      background: #fff;
+      color: #000;
+      font-family: inherit;
+      font-weight: 900;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      line-height: 1.1;
+      padding: 22px 16px 16px 16px;
+      text-align: left;
+      border-radius: 8px;
+      cursor: pointer;
+      mix-blend-mode: difference;
+      filter: drop-shadow(0 0 10px rgb(255, 255, 255));
+      transform: rotate(8deg);
+      transform-origin: top right;
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
+
+    .diploma-trigger::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.16) 50%, transparent 50%);
+      border-top-right-radius: 8px;
+      transition: transform 0.35s ease;
+      transform-origin: top right;
+    }
+
+    .diploma-options {
+      width: 230px;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transform: translateY(-10px) scale(0.96);
+      transform-origin: top right;
+      transition: max-height 0.42s ease, opacity 0.28s ease, transform 0.32s ease;
+    }
+
+    .diploma-option {
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .diploma-option:hover {
+      transform: translateX(-4px);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .diploma-menu:hover .diploma-trigger,
+    .diploma-menu:focus-within .diploma-trigger {
+      transform: rotate(0deg) scale(1.02);
+      filter: drop-shadow(0 0 20px rgb(255, 255, 255));
+    }
+
+    .diploma-menu:hover .diploma-trigger::before,
+    .diploma-menu:focus-within .diploma-trigger::before {
+      transform: scale(1.18);
+    }
+
+    .diploma-menu:hover .diploma-options,
+    .diploma-menu:focus-within .diploma-options {
+      max-height: 240px;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
     @keyframes sticker-wobble-diff {
       0%, 100% { transform: translateY(0) rotate(12deg) scale(1); }
       50% { transform: translateY(-8px) rotate(4deg) scale(1.05); }
@@ -524,6 +626,29 @@
       }
       .logo {
         width: 65%; /* Etwas kleiner auf Mobile */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .diploma-menu {
+        top: 20px;
+        right: 20px;
+      }
+
+      .diploma-trigger {
+        width: 98px;
+        height: 120px;
+        font-size: 12px;
+        padding: 16px 12px 12px 12px;
+      }
+
+      .diploma-options {
+        width: 188px;
+      }
+
+      .diploma-option {
+        font-size: 11px;
+        padding: 9px 10px;
       }
     }
   </style>
@@ -989,6 +1114,13 @@
       });
     }
 
+    const diplomaOptionLinks = document.querySelectorAll('.diploma-option');
+    diplomaOptionLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        trackEvent('diploma_option_click', { option: link.dataset.option || 'unknown' });
+      });
+    });
+
     // Sticker Button Animation Cleanup to prevent hover-reset
     const stickerBtn = document.querySelector('.sticker-btn');
     if (stickerBtn) {
@@ -1027,6 +1159,16 @@
     <span class="small">Live</span>
     <span>TICKETS</span>
   </a>
+  <div class="diploma-menu">
+    <button type="button" class="diploma-trigger" aria-label="Diplomarbeit Menü öffnen">
+      diplomarbeit
+    </button>
+    <div class="diploma-options">
+      <a href="https://open.spotify.com/artist/4BvTUdwQQrVKw3KZGkGjYJ?si=_nJN-rzsTemT21kCUBkHuw" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="song_abspielen">song abspielen</a>
+      <a href="https://paqay.cc" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="website_aufrufen">website aufrufen</a>
+      <a href="https://github.com/paqay/hiphopjourney-diploma-thesis/raw/main/main.pdf" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="pdf_download" download>PDF Download</a>
+    </div>
+  </div>
 </body>
 
 </html>

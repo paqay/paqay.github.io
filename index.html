@@ -610,13 +610,13 @@
     .song-player-popover {
       position: absolute;
       top: 0;
-      left: -6px;
-      right: -6px;
+      left: 0;
+      right: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 8px;
+      padding: 9px 10px;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.28);
       background: rgba(0, 0, 0, 0.6);
@@ -856,7 +856,7 @@
     let masterGain;
     let isMuted = true;
     let isSwitchingVideo = false;
-    const diplomaSong = new Audio('media/BRIGITTENAU.wav');
+    const diplomaSong = new Audio('/media/BRIGITTENAU.wav');
     diplomaSong.preload = 'metadata';
 
     function trackEvent(eventName, props = {}) {
@@ -1311,11 +1311,11 @@
         <button type="button" class="diploma-option song-option-toggle" data-option="song_abspielen">song abspielen</button>
         <div class="song-player-popover">
           <button type="button" class="song-play-btn" id="song-play-btn">play</button>
-          <a href="https://open.spotify.com/artist/4BvTUdwQQrVKw3KZGkGjYJ?si=_nJN-rzsTemT21kCUBkHuw" target="_blank" rel="noopener noreferrer" class="spotify-link diploma-option" data-option="song_spotify_open">open spotify</a>
+          <a href="/BRIGITTENAU.html" target="_blank" rel="noopener noreferrer" class="spotify-link diploma-option" data-option="song_spotify_open">open spotify</a>
         </div>
       </div>
       <a href="/hiphopjourney" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="website_aufrufen">website aufrufen</a>
-      <a href="media/DIPLOMARBEIT.pdf" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="pdf_download" download>PDF Download</a>
+      <a href="/media/DIPLOMARBEIT.pdf" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="pdf_download" download>PDF Download</a>
     </div>
   </div>
 </body>

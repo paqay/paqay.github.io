@@ -543,6 +543,16 @@
       transform-origin: top right;
       transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
       animation: diploma-float 4.5s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    .diploma-trigger-label {
+      display: block;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      position: relative;
+      z-index: 1;
     }
 
     .diploma-trigger::before {
@@ -841,13 +851,18 @@
       justify-content: space-between;
     }
 
+    .diploma-trigger:hover,
+    .diploma-trigger:focus-visible,
     .diploma-menu:hover .diploma-trigger,
     .diploma-menu:focus-within .diploma-trigger {
       transform: rotate(0deg) scale(1.03);
       filter: drop-shadow(0 0 20px rgb(255, 255, 255));
       animation-play-state: paused;
+      outline: none;
     }
 
+    .diploma-trigger:hover::before,
+    .diploma-trigger:focus-visible::before,
     .diploma-menu:hover .diploma-trigger::before,
     .diploma-menu:focus-within .diploma-trigger::before {
       transform: scale(1.18);
@@ -1553,7 +1568,7 @@
   </a>
   <div class="diploma-menu">
     <button type="button" class="diploma-trigger" aria-label="Diplomarbeit Menü öffnen">
-      diplomarbeit
+      <span class="diploma-trigger-label">diplomarbeit</span>
     </button>
     <div class="diploma-options">
       <div class="song-option-wrap">

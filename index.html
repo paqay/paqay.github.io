@@ -233,31 +233,6 @@
       opacity: 1;
     }
 
-    .keyboard-hint {
-      position: absolute;
-      bottom: 95px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 120;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 14px;
-      padding: 10px 14px;
-      font-size: 12px;
-      letter-spacing: 0.4px;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      pointer-events: none;
-      white-space: nowrap;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
-
-    .keyboard-hint.visible {
-      opacity: 1;
-    }
-
     @media (hover: none) and (pointer: coarse) {
       .magnifier {
         display: none;
@@ -509,7 +484,7 @@
     .diploma-menu {
       position: absolute;
       top: 40px;
-      right: 40px;
+      right: -90px;
       z-index: 140;
       display: flex;
       flex-direction: column;
@@ -517,6 +492,7 @@
       opacity: 0;
       animation: fadeIn 1s ease-in-out 1.2s forwards;
       isolation: isolate;
+      transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .diploma-trigger {
@@ -538,7 +514,7 @@
       cursor: pointer;
       border: 1px solid rgba(27, 24, 18, 0.18);
       box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.72);
-      transform: rotate(8deg);
+      transform: rotate(-8deg);
       transform-origin: top right;
       transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
       animation: diploma-float 4.5s ease-in-out infinite;
@@ -592,7 +568,7 @@
       width: 230px;
       position: absolute;
       top: calc(100% - 2px);
-      right: 0;
+      left: 0;
       padding-top: 12px;
       display: flex;
       flex-direction: column;
@@ -871,12 +847,18 @@
       justify-content: space-between;
     }
 
+    .diploma-menu:hover,
+    .diploma-menu:focus-within,
+    .diploma-menu.is-open {
+      right: 40px;
+    }
+
     .diploma-trigger:hover,
     .diploma-trigger:focus-visible,
     .diploma-menu.is-open .diploma-trigger,
     .diploma-menu:hover .diploma-trigger,
     .diploma-menu:focus-within .diploma-trigger {
-      transform: translateY(-2px) rotate(-1deg) scale(1.07);
+      transform: translateY(-2px) rotate(1deg) scale(1.07);
       box-shadow: 0 24px 40px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.85);
       animation-play-state: paused;
       outline: none;
@@ -900,8 +882,8 @@
     }
 
     @keyframes diploma-float {
-      0%, 100% { transform: translateY(0) rotate(8deg); }
-      50% { transform: translateY(-4px) rotate(5deg); }
+      0%, 100% { transform: translateY(0) rotate(-8deg); }
+      50% { transform: translateY(-4px) rotate(-5deg); }
     }
 
     @keyframes sticker-wobble-diff {
@@ -928,6 +910,12 @@
     @media (max-width: 480px) {
       .diploma-menu {
         top: 20px;
+        right: -80px;
+      }
+
+      .diploma-menu:hover,
+      .diploma-menu:focus-within,
+      .diploma-menu.is-open {
         right: 20px;
       }
 
@@ -1005,7 +993,6 @@
 
   <div class="magnifier" id="magnifier"></div>
   <div class="video-status" id="video-status" role="status" aria-live="polite"></div>
-  <div class="keyboard-hint" id="keyboard-hint">Space: Next Video • ←/→: Browse • M: Mute</div>
 
   <button class="mute-btn" id="mute-btn" aria-label="Mute Toggle">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1042,10 +1029,8 @@
     const logo = document.getElementById('logo');
     const magnifier = document.getElementById('magnifier');
     const videoStatus = document.getElementById('video-status');
-    const keyboardHint = document.getElementById('keyboard-hint');
     const VIDEO_CACHE_KEY = 'paqay_video_sources_v1';
     const VIDEO_CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
-    const SHORTCUT_HINT_KEY = 'paqay_shortcuts_hint_seen_v1';
     const PRELOAD_AHEAD_COUNT = 2;
     const preloadedSources = new Set();
     
@@ -1100,22 +1085,6 @@
       } else {
         rootStyle.setProperty('--bg-blur', '10px');
         rootStyle.setProperty('--bg-brightness', '1');
-      }
-    }
-
-    function showKeyboardHintOnce() {
-      if (!keyboardHint) return;
-      try {
-        if (localStorage.getItem(SHORTCUT_HINT_KEY) === '1') return;
-        window.setTimeout(() => {
-          keyboardHint.classList.add('visible');
-          window.setTimeout(() => {
-            keyboardHint.classList.remove('visible');
-          }, 5000);
-        }, 1400);
-        localStorage.setItem(SHORTCUT_HINT_KEY, '1');
-      } catch (error) {
-        console.warn('Shortcut Hint konnte nicht gespeichert werden:', error);
       }
     }
 
@@ -1587,7 +1556,6 @@
     });
 
     applyPerformanceProfile();
-    showKeyboardHintOnce();
     window.addEventListener('resize', applyPerformanceProfile);
 
     function copyEmailToClipboard(email, btnElement) {

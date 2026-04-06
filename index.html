@@ -872,21 +872,24 @@
 
     .diploma-trigger:hover,
     .diploma-trigger:focus-visible,
+    .diploma-menu.is-open .diploma-trigger,
     .diploma-menu:hover .diploma-trigger,
     .diploma-menu:focus-within .diploma-trigger {
-      transform: rotate(0deg) scale(1.03);
-      box-shadow: 0 20px 34px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform: translateY(-2px) rotate(-1deg) scale(1.07);
+      box-shadow: 0 24px 40px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.85);
       animation-play-state: paused;
       outline: none;
     }
 
     .diploma-trigger:hover::before,
     .diploma-trigger:focus-visible::before,
+    .diploma-menu.is-open .diploma-trigger::before,
     .diploma-menu:hover .diploma-trigger::before,
     .diploma-menu:focus-within .diploma-trigger::before {
-      transform: scale(1.18);
+      transform: scale(1.24);
     }
 
+    .diploma-menu.is-open .diploma-options,
     .diploma-menu:hover .diploma-options,
     .diploma-menu:focus-within .diploma-options {
       max-height: 420px;
@@ -1423,6 +1426,33 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
+      const diplomaMenu = document.querySelector('.diploma-menu');
+      const diplomaTrigger = document.querySelector('.diploma-trigger');
+
+      if (diplomaMenu && diplomaTrigger) {
+        diplomaTrigger.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          diplomaMenu.classList.toggle('is-open');
+          const isExpanded = diplomaMenu.classList.contains('is-open');
+          diplomaTrigger.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!diplomaMenu.contains(event.target)) {
+            diplomaMenu.classList.remove('is-open');
+            diplomaTrigger.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            diplomaMenu.classList.remove('is-open');
+            diplomaTrigger.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+
       const ticketBtn = document.querySelector('.sticker-btn');
       if (ticketBtn) {
         ticketBtn.addEventListener('click', () => {
@@ -1586,7 +1616,7 @@
     <span>TICKETS</span>
   </a>
   <div class="diploma-menu">
-    <button type="button" class="diploma-trigger" aria-label="Diplomarbeit Menü öffnen">
+    <button type="button" class="diploma-trigger" aria-label="Diplomarbeit Menü öffnen" aria-expanded="false">
       <span class="diploma-trigger-label">diplomarbeit</span>
     </button>
     <div class="diploma-options">

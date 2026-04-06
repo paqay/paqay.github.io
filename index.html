@@ -690,6 +690,139 @@
       outline: none;
     }
 
+    .audio-preview-card {
+      position: absolute;
+      top: 208px;
+      right: 40px;
+      z-index: 145;
+      width: 260px;
+      color: #fff;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(0, 0, 0, 0.58);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      padding: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px) scale(0.96);
+      transition: opacity 0.24s ease, transform 0.24s ease;
+    }
+
+    .audio-preview-card.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .audio-preview-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .audio-preview-title {
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .audio-preview-subtitle {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      opacity: 0.8;
+      letter-spacing: 0.7px;
+    }
+
+    .audio-preview-close {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-radius: 8px;
+      padding: 3px 8px;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .audio-preview-close:hover,
+    .audio-preview-close:focus-visible {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.55);
+      outline: none;
+    }
+
+    .audio-preview-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .audio-preview-play {
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-size: 10px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .audio-preview-play:hover,
+    .audio-preview-play:focus-visible {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.62);
+      outline: none;
+    }
+
+    .audio-preview-spotify {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      border: 1px solid rgba(30, 215, 96, 0.55);
+      background: rgba(30, 215, 96, 0.22);
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 10px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .audio-preview-spotify:hover,
+    .audio-preview-spotify:focus-visible {
+      background: rgba(30, 215, 96, 0.36);
+      border-color: rgba(30, 215, 96, 0.85);
+      outline: none;
+    }
+
+    .audio-preview-progress {
+      width: 100%;
+      margin: 0;
+      accent-color: #fff;
+    }
+
+    .audio-preview-time {
+      margin-top: 6px;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      opacity: 0.8;
+      display: flex;
+      justify-content: space-between;
+    }
+
     .diploma-menu:hover .diploma-trigger,
     .diploma-menu:focus-within .diploma-trigger {
       transform: rotate(0deg) scale(1.03);
@@ -765,6 +898,12 @@
       .spotify-link {
         font-size: 10px;
         padding: 8px 8px;
+      }
+
+      .audio-preview-card {
+        top: 164px;
+        right: 20px;
+        width: 210px;
       }
     }
   </style>
@@ -1225,52 +1364,127 @@
       }
     });
 
-    const ticketBtn = document.querySelector('.sticker-btn');
-    if (ticketBtn) {
-      ticketBtn.addEventListener('click', () => {
-        trackEvent('tickets_click');
-      });
-    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const ticketBtn = document.querySelector('.sticker-btn');
+      if (ticketBtn) {
+        ticketBtn.addEventListener('click', () => {
+          trackEvent('tickets_click');
+        });
+      }
 
-    const diplomaOptionLinks = document.querySelectorAll('.diploma-option');
-    diplomaOptionLinks.forEach((link) => {
-      link.addEventListener('click', () => {
-        trackEvent('diploma_option_click', { option: link.dataset.option || 'unknown' });
+      const diplomaOptionLinks = document.querySelectorAll('.diploma-option');
+      diplomaOptionLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          trackEvent('diploma_option_click', { option: link.dataset.option || 'unknown' });
+        });
       });
-    });
 
-    const songPlayBtn = document.getElementById('song-play-btn');
-    if (songPlayBtn) {
-      const updateSongPlayLabel = () => {
-        songPlayBtn.textContent = diplomaSong.paused ? 'play' : 'pause';
+      const songPlayBtn = document.getElementById('song-play-btn');
+      const audioPreview = document.getElementById('diploma-audio-preview');
+      const previewPlayBtn = document.getElementById('preview-play-btn');
+      const previewCloseBtn = document.getElementById('preview-close-btn');
+      const previewProgress = document.getElementById('preview-progress');
+      const previewCurrent = document.getElementById('preview-current-time');
+      const previewDuration = document.getElementById('preview-duration-time');
+
+      const formatAudioTime = (seconds) => {
+        if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+        return `${mins}:${secs}`;
       };
 
-      songPlayBtn.addEventListener('click', () => {
+      const updateSongButtons = () => {
+        const isPaused = diplomaSong.paused;
+        if (songPlayBtn) songPlayBtn.textContent = isPaused ? 'play' : 'pause';
+        if (previewPlayBtn) previewPlayBtn.textContent = isPaused ? 'play' : 'pause';
+      };
+
+      const syncPreviewProgress = () => {
+        if (!previewProgress) return;
+        const duration = Number.isFinite(diplomaSong.duration) ? diplomaSong.duration : 0;
+        const current = Number.isFinite(diplomaSong.currentTime) ? diplomaSong.currentTime : 0;
+        previewProgress.max = duration || 0;
+        previewProgress.value = current;
+        if (previewCurrent) previewCurrent.textContent = formatAudioTime(current);
+        if (previewDuration) previewDuration.textContent = formatAudioTime(duration);
+      };
+
+      const openAudioPreview = () => {
+        if (audioPreview) audioPreview.classList.add('visible');
+      };
+
+      const closeAudioPreview = () => {
+        if (audioPreview) audioPreview.classList.remove('visible');
+      };
+
+      const toggleDiplomaSongPlayback = () => {
         if (diplomaSong.paused) {
-          diplomaSong.play().then(() => {
-            updateSongPlayLabel();
+          return diplomaSong.play().then(() => {
+            openAudioPreview();
+            updateSongButtons();
             trackEvent('diploma_song_play');
           }).catch((error) => {
             console.warn('Song konnte nicht gestartet werden:', error);
           });
-        } else {
-          diplomaSong.pause();
-          updateSongPlayLabel();
-          trackEvent('diploma_song_pause');
         }
+
+        diplomaSong.pause();
+        updateSongButtons();
+        trackEvent('diploma_song_pause');
+        return Promise.resolve();
+      };
+
+      if (songPlayBtn) {
+        songPlayBtn.addEventListener('click', () => {
+          toggleDiplomaSongPlayback();
+        });
+      }
+
+      if (previewPlayBtn) {
+        previewPlayBtn.addEventListener('click', () => {
+          toggleDiplomaSongPlayback();
+        });
+      }
+
+      if (previewCloseBtn) {
+        previewCloseBtn.addEventListener('click', () => {
+          diplomaSong.pause();
+          updateSongButtons();
+          closeAudioPreview();
+        });
+      }
+
+      if (previewProgress) {
+        previewProgress.addEventListener('input', (event) => {
+          diplomaSong.currentTime = Number(event.target.value) || 0;
+          syncPreviewProgress();
+        });
+      }
+
+      diplomaSong.addEventListener('timeupdate', syncPreviewProgress);
+      diplomaSong.addEventListener('loadedmetadata', syncPreviewProgress);
+      diplomaSong.addEventListener('play', updateSongButtons);
+      diplomaSong.addEventListener('pause', updateSongButtons);
+      diplomaSong.addEventListener('ended', () => {
+        updateSongButtons();
+        syncPreviewProgress();
       });
 
-      diplomaSong.addEventListener('ended', updateSongPlayLabel);
-      updateSongPlayLabel();
-    }
+      updateSongButtons();
+      syncPreviewProgress();
+      if (previewDuration) {
+        previewDuration.textContent = '--:--';
+      }
 
-    // Sticker Button Animation Cleanup to prevent hover-reset
-    const stickerBtn = document.querySelector('.sticker-btn');
-    if (stickerBtn) {
-      setTimeout(() => {
-        stickerBtn.classList.add('ready');
-      }, 2500); // 1.2s delay + 1s duration + 0.3s buffer
-    }
+      // Sticker Button Animation Cleanup to prevent hover-reset
+      const stickerBtn = document.querySelector('.sticker-btn');
+      if (stickerBtn) {
+        setTimeout(() => {
+          stickerBtn.classList.add('ready');
+        }, 2500); // 1.2s delay + 1s duration + 0.3s buffer
+      }
+    });
 
     applyPerformanceProfile();
     showKeyboardHintOnce();
@@ -1316,6 +1530,24 @@
       </div>
       <a href="/hiphopjourney" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="website_aufrufen">website aufrufen</a>
       <a href="/media/DIPLOMARBEIT.pdf" target="_blank" rel="noopener noreferrer" class="diploma-option" data-option="pdf_download" download>PDF Download</a>
+    </div>
+  </div>
+  <div class="audio-preview-card" id="diploma-audio-preview" role="region" aria-label="Song Preview Player">
+    <div class="audio-preview-head">
+      <div class="audio-preview-title">
+        BRIGITTENAU
+        <span class="audio-preview-subtitle">WAV Preview</span>
+      </div>
+      <button type="button" class="audio-preview-close" id="preview-close-btn" aria-label="Player schließen">×</button>
+    </div>
+    <div class="audio-preview-controls">
+      <button type="button" class="audio-preview-play" id="preview-play-btn">play</button>
+      <a href="/BRIGITTENAU.html" target="_blank" rel="noopener noreferrer" class="audio-preview-spotify">open spotify</a>
+    </div>
+    <input type="range" min="0" max="0" value="0" class="audio-preview-progress" id="preview-progress" aria-label="Song Progress">
+    <div class="audio-preview-time">
+      <span id="preview-current-time">0:00</span>
+      <span id="preview-duration-time">--:--</span>
     </div>
   </div>
 </body>

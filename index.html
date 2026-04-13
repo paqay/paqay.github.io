@@ -1214,14 +1214,8 @@
       }
 
       try {
-        const headers = {};
-        // Optional: GitHub Token aus window.GITHUB_TOKEN (kann über environment variable gesetzt werden)
-        if (window.GITHUB_TOKEN) {
-          headers['Authorization'] = `token ${window.GITHUB_TOKEN}`;
-        }
-        
-        const response = await fetch('https://api.github.com/repos/paqay/paqay.github.io/contents/media/videos', { headers });
-        if (!response.ok) throw new Error(`GitHub API ${response.status}`);
+        const response = await fetch('https://api.github.com/repos/paqay/paqay.github.io/contents/media/videos');
+        if (!response.ok) throw new Error('GitHub API Error oder Rate Limit');
 
         const files = await response.json();
         const mp4Files = files
@@ -1231,7 +1225,6 @@
         if (mp4Files.length > 0) {
           videoSources = mp4Files;
           writeCachedVideoSources(mp4Files);
-          console.log('Video-Liste aktualisiert:', mp4Files.length, 'Videos');
         }
 
         if (!cachedSources || cachedSources.length === 0) {
@@ -1239,7 +1232,7 @@
         }
         preloadUpcomingVideos();
       } catch (error) {
-        console.warn('GitHub API offline, Fallback aktiv:', error.message);
+        console.warn('Nutze Video-Fallback:', error);
         if (!cachedSources || cachedSources.length === 0) {
           playRandomVideo();
           preloadUpcomingVideos();

@@ -507,7 +507,7 @@
     }
 
     body.performance-lite .background-video {
-      filter: brightness(var(--bg-brightness));
+      filter: blur(var(--bg-blur)) brightness(var(--bg-brightness));
     }
 
     body.performance-lite .magnifier {
@@ -649,7 +649,7 @@
       const useLiteProfile = prefersDataSaver || lowPowerDevice || isSmallScreen || prefersReducedMotion || isWindows;
 
       if (useLiteProfile) {
-        rootStyle.setProperty('--bg-blur', '8px');
+        rootStyle.setProperty('--bg-blur', '6px');
         rootStyle.setProperty('--bg-brightness', '0.98');
         preloadAheadCount = 1;
         document.body.classList.add('performance-lite');

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="media/flakturm grafik 2.ico" />
+  <title>paqay Analytics 📊</title>
+  <meta name="description" content="Analytics Dashboard - Traffic und Event Daten von paqay.cc" />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E09V5RMZHJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-E09V5RMZHJ');
+  </script>
+
+  <style>
+    :root {
+      --primary: #fff;
+      --accent: rgba(30, 215, 96, 0.8);
+      --bg-blur: 10px;
+      --bg-brightness: 1;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      background: #000;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(var(--bg-blur)) brightness(var(--bg-brightness));
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out 0.3s forwards;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      mix-blend-mode: difference;
+    }
+
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      transition: all 0.4s ease;
+      mix-blend-mode: difference;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transform: translateY(-3px);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 25px;
+      color: var(--primary);
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out forwards;
+      transition: all 0.4s ease;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.4s; }
+    .card:nth-child(2) { animation-delay: 0.5s; }
+    .card:nth-child(3) { animation-delay: 0.6s; }
+    .card:nth-child(4) { animation-delay: 0.7s; }
+    .card:nth-child(5) { animation-delay: 0.8s; }
+    .card:nth-child(6) { animation-delay: 0.9s; }
+
+    @media (hover: hover) {
+      .card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .card-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .card-unit {
+      font-size: 13px;
+      opacity: 0.6;
+      letter-spacing: 0.5px;
+    }
+
+    .card-value.accent {
+      color: var(--accent);
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .table-card {
+      padding: 30px;
+    }
+
+    .table-card h3 {
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .data-table thead {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.8;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 12px 0;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .data-table td {
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .data-table td:first-child {
+      font-weight: 600;
+    }
+
+    .data-table td:last-child {
+      text-align: right;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .event-badge {
+      display: inline-block;
+      background: rgba(30, 215, 96, 0.2);
+      border: 1px solid rgba(30, 215, 96, 0.5);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .counter {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .info-box {
+      background: rgba(100, 150, 200, 0.1);
+      border-left: 3px solid rgba(100, 150, 200, 0.5);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 20px;
+      opacity: 0.85;
+    }
+
+    .info-box strong {
+      color: var(--primary);
+    }
+
+    .storage-warning {
+      background: rgba(255, 180, 100, 0.1);
+      border-left: 3px solid rgba(255, 180, 100, 0.7);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 20px;
+      opacity: 0.9;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--primary);
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .btn.primary {
+      background: rgba(30, 215, 96, 0.3);
+      border-color: rgba(30, 215, 96, 0.6);
+      color: var(--accent);
+    }
+
+    .btn.primary:hover {
+      background: rgba(30, 215, 96, 0.5);
+      border-color: rgba(30, 215, 96, 0.9);
+    }
+
+    .no-data {
+      text-align: center;
+      opacity: 0.6;
+      padding: 40px 20px;
+      font-style: italic;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --bg-blur: 8px;
+        --bg-brightness: 0.98;
+      }
+
+      .container {
+        padding: 20px 15px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .data-table {
+        font-size: 12px;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 10px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <video class="background-video" autoplay muted loop playsinline preload="auto">
+    <source src="media/videos/1020 footage.mp4" type="video/mp4" />
+  </video>
+
+  <div class="container">
+    <div class="header">
+      <h1>📊 Analytics Dashboard</h1>
+      <a href="/" class="back-link">← Zurück zur Site</a>
+    </div>
+
+    <div class="dashboard" id="dashboard">
+      <!-- Cards werden mit JavaScript gefüllt -->
+    </div>
+  </div>
+
+  <script>
+    // Polyfill für Daten
+    const analyticsData = {
+      localStorage: {},
+      ga4: null,
+      plausible: null
+    };
+
+    // LocalStorage Daten auslesen
+    function loadLocalStorageMetrics() {
+      try {
+        const stored = JSON.parse(localStorage.getItem('paqay_metrics') || '{}');
+        analyticsData.localStorage = stored;
+      } catch (e) {
+        console.warn('LocalStorage konnte nicht gelesen werden:', e);
+      }
+    }
+
+    // GA4 Integration Skelett - wird mit Google Analytics JS API gefüllt
+    function loadGA4Data() {
+      // In echtem Setup würde hier gtag('get', ...) verwendet
+      // oder Google Analytics Reporting API
+      if (typeof window.gtag === 'function') {
+        console.log('GA4 verfügbar');
+        // TODO: GA4 API Integration
+      }
+    }
+
+    // Plausible Integration Skelett
+    function loadPlausibleData() {
+      if (typeof window.plausible === 'function') {
+        console.log('Plausible verfügbar');
+        // TODO: Plausible API Integration
+      }
+    }
+
+    function formatNumber(num) {
+      if (!Number.isFinite(num)) return '0';
+      return num.toLocaleString('de-DE');
+    }
+
+    function renderDashboard() {
+      const dashboard = document.getElementById('dashboard');
+      dashboard.innerHTML = '';
+
+      // Berechne Statistiken aus LocalStorage
+      const metrics = analyticsData.localStorage;
+      const totalEvents = Object.values(metrics).reduce((a, b) => a + b, 0);
+
+      // Top Events
+      const sortedEvents = Object.entries(metrics)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
+
+      // KPI Cards
+      const kpiCards = [
+        {
+          label: 'Total Events (LocalStorage)',
+          value: formatNumber(totalEvents),
+          unit: 'events'
+        },
+        {
+          label: 'Unique Event Types',
+          value: Object.keys(metrics).length,
+          unit: 'types'
+        },
+        {
+          label: 'Video Switches',
+          value: formatNumber(metrics.video_switch_logo_click || 0),
+          unit: 'clicks'
+        },
+        {
+          label: 'Video Switches (Space)',
+          value: formatNumber(metrics.video_switch_space || 0),
+          unit: 'presses'
+        },
+        {
+          label: 'Mute Toggles',
+          value: formatNumber(metrics.mute_toggle || 0),
+          unit: 'toggles'
+        },
+        {
+          label: 'Drumkit Clicks',
+          value: formatNumber(metrics.drumkit_click || 0),
+          unit: 'clicks'
+        }
+      ];
+
+      // Render KPI Cards
+      kpiCards.forEach((kpi, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.animationDelay = `${0.4 + idx * 0.1}s`;
+        card.innerHTML = `
+          <div class="card-label">${kpi.label}</div>
+          <div class="card-value ${kpi.value !== '0' ? 'accent' : ''}">${kpi.value}</div>
+          <div class="card-unit">${kpi.unit}</div>
+        `;
+        dashboard.appendChild(card);
+      });
+
+      // Events Table
+      if (sortedEvents.length > 0) {
+        const tableCard = document.createElement('div');
+        tableCard.className = 'card table-card full-width';
+        tableCard.style.animationDelay = '1.0s';
+
+        let tableHTML = `
+          <h3>📈 Top Events</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Event Name</th>
+                <th>Count</th>
+                <th>% des Gesamt</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        sortedEvents.forEach(([eventName, count]) => {
+          const percentage = ((count / totalEvents) * 100).toFixed(1);
+          tableHTML += `
+            <tr>
+              <td><span class="event-badge">${eventName}</span></td>
+              <td><span class="counter">${formatNumber(count)}</span></td>
+              <td>${percentage}%</td>
+            </tr>
+          `;
+        });
+
+        tableHTML += `
+            </tbody>
+          </table>
+          <div class="info-box">
+            <strong>ℹ️ Hinweis:</strong> Diese Daten werden lokal im Browser gespeichert. 
+            Für vollständige Traffic-Analysen (Traffic-Quellen, Geräte, Länder) siehe die integrierten Analytics-Services.
+          </div>
+        `;
+
+        tableCard.innerHTML = tableHTML;
+        dashboard.appendChild(tableCard);
+      }
+
+      // Data Sources Info Card
+      const infoCard = document.createElement('div');
+      infoCard.className = 'card table-card full-width';
+      infoCard.style.animationDelay = '1.1s';
+      infoCard.innerHTML = `
+        <h3>🔗 Verfügbare Datenquellen</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Status</th>
+              <th>Verfügbare Daten</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LocalStorage</strong></td>
+              <td><span class="event-badge" style="background: rgba(30, 215, 96, 0.2); color: #1ed760;">✓ Aktiv</span></td>
+              <td>Event-basierte Metriken (lokal pro Gerät)</td>
+            </tr>
+            <tr>
+              <td><strong>Google Analytics 4</strong></td>
+              <td>${typeof window.gtag === 'function' ? '<span class="event-badge" style="background: rgba(30, 215, 96, 0.2); color: #1ed760;">✓ Verfügbar</span>' : '<span class="event-badge" style="background: rgba(255, 120, 120, 0.2); color: #ff9999;">✗ Nicht aktiv</span>'}</td>
+              <td>Traffic-Quellen, Geräte, Länder, Session-Daten</td>
+            </tr>
+            <tr>
+              <td><strong>Plausible Analytics</strong></td>
+              <td>${typeof window.plausible === 'function' ? '<span class="event-badge" style="background: rgba(30, 215, 96, 0.2); color: #1ed760;">✓ Verfügbar</span>' : '<span class="event-badge" style="background: rgba(255, 120, 120, 0.2); color: #ff9999;">✗ Nicht aktiv</span>'}</td>
+              <td>Privacy-first Analytics, Traffic-Quellen, Seiten-Ansichten</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="storage-warning">
+          <strong>💡 Tipp:</strong> Um vollständige Traffic-Daten zu sehen:
+          <ul style="margin-top: 8px; margin-left: 20px;">
+            <li>Aktiviere <strong>Google Analytics 4</strong> im Tag Manager oder über gtag.js</li>
+            <li>Oder verwende <strong>Plausible Analytics</strong> für privacy-first Tracking</li>
+            <li>Beide Services bieten Echtzeit-Dashboards mit Traffic-Quellen und Referrer-Informationen</li>
+          </ul>
+        </div>
+
+        <div class="button-group">
+          <a href="https://analytics.google.com" target="_blank" class="btn">GA4 Dashboard ↗</a>
+          <a href="https://plausible.io" target="_blank" class="btn">Plausible Dashboard ↗</a>
+          <button class="btn primary" onclick="clearLocalMetrics()">LocalStorage Löschen</button>
+        </div>
+      `;
+      dashboard.appendChild(infoCard);
+    }
+
+    function clearLocalMetrics() {
+      if (confirm('Wirklich alle lokalen Metrics löschen?')) {
+        localStorage.removeItem('paqay_metrics');
+        alert('LocalStorage Metrics gelöscht!');
+        loadLocalStorageMetrics();
+        renderDashboard();
+      }
+    }
+
+    // Initialization
+    loadLocalStorageMetrics();
+    loadGA4Data();
+    loadPlausibleData();
+    renderDashboard();
+  </script>
+</body>
+
+</html>

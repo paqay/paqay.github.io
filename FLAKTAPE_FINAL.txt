@@ -1,0 +1,226 @@
+╔═════════════════════════════════════════════════════════════════╗
+║     FLAKTAPE v4.0 - PARALLAX TOWER BACKGROUND EDITION           ║
+║              Design-First • Visual • Creative                    ║
+╚═════════════════════════════════════════════════════════════════╝
+
+🎨 FINAL DESIGN:
+═════════════════════════════════════════════════════════════════
+
+TOWER PARALLAX BACKGROUND THROUGHOUT ENTIRE SITE.
+
+As you scroll, the tower moves subtly in the background at 0.5x 
+scroll speed, creating a depth illusion. Tower is ALWAYS present, 
+supporting the content without overwhelming it.
+
+═════════════════════════════════════════════════════════════════
+
+✨ KEY IMPLEMENTATION:
+═════════════════════════════════════════════════════════════════
+
+PARALLAX TOWER LAYER:
+  • Position: fixed (stays centered while page scrolls)
+  • Width: 100vw, Height: 200vh (tall for movement range)
+  • Z-index: 0 (behind ALL content)
+  • Opacity: 0.08 (subtle, readable)
+  • Centered: top: 50%, left: 50%
+  • Moved via JavaScript: scrollY * 0.5
+
+CONTENT LAYERS:
+  • Background: Parallax tower (z-index: 0)
+  • Sections: All content (z-index: 1)
+  • Buttons/Cards: Interactive elements (z-index: 2)
+  • Hero tower: Foreground image (z-index: 10)
+
+PARALLAX CALCULATION:
+  towerY = scrollY * 0.5
+  transform: translate(-50%, calc(-50% + ${towerY}px))
+  
+  Result: Tower moves half as fast as scroll = depth effect
+
+═════════════════════════════════════════════════════════════════
+
+🏗️ VISUAL STRUCTURE:
+═════════════════════════════════════════════════════════════════
+
+1. HERO (100vh)
+   Title "FLAKTAPE" + Large tower image + "Out Now"
+   Tower parallax visible in background
+
+2. ABOUT (100vh)
+   Heading "A Structure Of Sound"
+   Tower parallax visible in background
+
+3. TRACKS (100vh)
+   Heading "Tracks" + 6 square cards in 3x2 grid
+   Tower parallax visible in background
+   Cards hover with scale + invert
+
+4. LISTEN (100vh)
+   Dark section with "Listen" heading + inverted tower parallax
+   6 square streaming buttons below
+
+5. FOOTER (50vh)
+   Black background with artist name, year, links
+
+═════════════════════════════════════════════════════════════════
+
+🎬 ANIMATION & INTERACTION:
+═════════════════════════════════════════════════════════════════
+
+PARALLAX:
+  • Tower moves at 0.5x scroll speed (continuous)
+  • Smooth transform: translateY based on scrollY
+  • No jumps or stuttering
+
+ENTRANCE ANIMATIONS:
+  • Hero title: scaleInTitle (3D perspective)
+  • Hero tower: rotateInTower (3D rotation + scale)
+  • Track cards: scaleInGrid (scale + rotate, staggered)
+  • Buttons: slideInBtn (slide + perspective, staggered)
+
+HOVER EFFECTS:
+  • Track cards: scale(1.1), rotate(2deg), color invert
+  • Buttons: scale(1.08), translateY(-5px), color invert
+
+SCROLL ANIMATIONS:
+  • Fade-in on scroll for section headings
+  • IntersectionObserver for efficient triggering
+
+═════════════════════════════════════════════════════════════════
+
+🎨 DESIGN ELEMENTS:
+═════════════════════════════════════════════════════════════════
+
+TYPOGRAPHY:
+  • Unbounded 900: Massive, bold headings (12rem max)
+  • Space Mono 700: Minimal, monospace labels
+
+COLOR SCHEME:
+  • Pure black & white (#000000, #ffffff, #f5f5f5)
+  • Sections alternate: light → gray → dark → light
+  • High contrast for readability
+
+GRID SYSTEM:
+  • Fullscreen sections (100vh each)
+  • Square cards (1:1 aspect ratio)
+  • Responsive: auto-fit minmax
+  • Consistent spacing (1.5rem, 3rem gaps)
+
+VISUAL EFFECTS:
+  • Drop shadow on hero tower (depth)
+  • Inverted imagery in dark sections
+  • Semi-transparent parallax background (0.08)
+  • Staggered animation delays (0.1s increments)
+  • Cubic-bezier spring easing
+
+═════════════════════════════════════════════════════════════════
+
+💾 TECHNICAL SPECIFICATIONS:
+═════════════════════════════════════════════════════════════════
+
+File: FLAKTAPE.html
+Size: 16.8 KB (single file)
+Lines: 611 (efficient, lean code)
+
+HTML5 Structure:
+  • Semantic sections
+  • Responsive viewport meta
+  • Proper DOCTYPE
+
+CSS3 Styling:
+  • CSS Grid + Flexbox layouts
+  • 6 @keyframes animations
+  • Custom color variables
+  • Media queries (3 breakpoints)
+  • GPU-accelerated transforms
+
+JavaScript:
+  • Vanilla JS (no frameworks)
+  • Scroll event listener for parallax
+  • IntersectionObserver for efficiency
+  • Smooth scroll behavior
+
+Fonts:
+  • Google Fonts: Unbounded 900, Space Mono 700
+
+Responsive:
+  • Desktop: 1024px+ (full layout)
+  • Tablet: 768px (adjusted grids)
+  • Mobile: 480px (single column, optimized)
+
+═════════════════════════════════════════════════════════════════
+
+🎯 USER EXPERIENCE:
+═════════════════════════════════════════════════════════════════
+
+As user scrolls:
+  → Tower parallax moves subtly in background
+  → Creates feeling of depth and dimension
+  → Content floats above the tower
+  → Minimal text focuses attention on design
+  → Each section is a visual moment
+  → Tower is constant companion throughout
+  → Buttons respond to touch/hover
+  → Colors invert between sections
+  → Experience is about FEELING, not READING
+
+═════════════════════════════════════════════════════════════════
+
+🔧 CUSTOMIZATION:
+═════════════════════════════════════════════════════════════════
+
+TRACK NAMES:
+  Line ~315: <div class="track-title">Found</div>
+  Change to: <div class="track-title">YourTitle</div>
+
+TRACK TIMES:
+  Line ~317: <div class="track-time">2:34</div>
+  Change to: <div class="track-time">X:XX</div>
+
+STREAMING LINKS:
+  Line ~355: <a href="#">Spotify</a>
+  Change to: <a href="https://spotify.com/...">Spotify</a>
+
+FOOTER LINKS:
+  Line ~379: <a href="#">Web</a>
+  Change to: <a href="https://yoursite.com">Web</a>
+
+PARALLAX SPEED (advanced):
+  Line ~566: scrollY * 0.5
+  Change 0.5 to: 0.3 (slower) or 0.7 (faster)
+
+TOWER OPACITY (advanced):
+  Line ~30: opacity: 0.08
+  Change to: 0.05 (more subtle) or 0.15 (more visible)
+
+═════════════════════════════════════════════════════════════════
+
+✨ FINAL FEATURES:
+═════════════════════════════════════════════════════════════════
+
+✓ Parallax tower background (fixed, 0.5x scroll speed)
+✓ Design-first minimalist approach
+✓ Tower as constant visual anchor
+✓ Fullscreen immersive sections
+✓ Square visual grids (balanced, symmetric)
+✓ Minimal text (design over content)
+✓ Bold typography (Unbounded 900)
+✓ High contrast black & white
+✓ Smooth scroll animations
+✓ Hover effects on all interactive elements
+✓ Staggered entrance animations
+✓ Responsive across all devices
+✓ GPU-accelerated performance
+✓ Single file deployment
+✓ No external dependencies (except Google Fonts)
+
+═════════════════════════════════════════════════════════════════
+
+Created: April 9, 2026
+Version: 4.0 - Parallax Tower Background
+Status: ✅ Production Ready
+
+The tower lives in the background. Always present. Always moving.
+A visual companion to your album release.
+
+═════════════════════════════════════════════════════════════════

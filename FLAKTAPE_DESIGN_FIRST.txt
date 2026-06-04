@@ -1,0 +1,208 @@
+╔═══════════════════════════════════════════════════════════════╗
+║        FLAKTAPE v3.0 - DESIGN-FIRST EXPERIENCE               ║
+║              Minimalist • Visual • Creative                    ║
+╚═══════════════════════════════════════════════════════════════╝
+
+🎨 DESIGN PHILOSOPHY:
+═══════════════════════════════════════════════════════════════
+
+LESS TEXT, MORE VISUAL.
+Focus on the tower. Focus on space. Focus on typography as form.
+
+Instead of information architecture, visual hierarchy.
+Instead of paragraphs, white space.
+Instead of descriptions, pure aesthetics.
+
+═══════════════════════════════════════════════════════════════
+
+✨ DESIGN FEATURES:
+═══════════════════════════════════════════════════════════════
+
+🏗️ TOWER AS VISUAL ANCHOR:
+   • Hero: 500px tower centered, dominant focal point
+   • About: Large tower with poetic section heading
+   • Dividers: 7 tower dividers with floating animation
+   • Listen: Tower + streaming buttons grid
+   • Parallax background: Subtle 5% opacity tower on fixed layer
+
+🎯 TYPOGRAPHY AS DESIGN:
+   • Unbounded 900: Massive, bold, aggressive headings (12rem max)
+   • Space Mono: Minimal, monospace labels for information
+   • Letter-spacing: Extreme tracking for premium feel
+   • Minimal text: Only essential labels (no paragraphs)
+   • Uppercase everything: Pure geometric aesthetic
+
+⬜️ COLOR & CONTRAST:
+   • Pure black & white (#000000, #ffffff, #f5f5f5)
+   • High contrast sections: Dark → Light → Gray → Dark → Light
+   • No gradients except subtle hero gradient
+   • Inverted imagery in dark sections (tower inverted + white)
+
+✨ VISUAL GRID SYSTEM:
+   • Fullscreen sections (100vh each)
+   • Track cards: 1:1 aspect ratio (square tiles)
+   • Streaming buttons: 1:1 aspect ratio (square, grid layout)
+   • Consistent gaps and padding (1.5rem, 3rem)
+   • Responsive columns: Auto-fit minmax
+
+🎬 ANIMATION SUITE:
+   • scaleInTitle: Hero title 3D entry
+   • rotateInTower: Hero tower 3D perspective rotation
+   • slideInBtn: Staggered button entrance (0.1s delay each)
+   • scaleInGrid: Track cards scale + rotate on load
+   • floatTower: Divider tower subtle floating (-30px movement)
+   • fadeInOnScroll: Section content reveals on scroll
+   • Cubic-bezier spring easing: (0.34, 1.56, 0.64, 1)
+
+🎪 INTERACTIVE EFFECTS:
+   • Track hover: Scale 1.1, rotate 2deg, color invert
+   • Button hover: Scale 1.08, translateY(-5px)
+   • All transitions: 0.3-0.4s smooth easing
+   • Parallax background: Moves 30% of scroll distance
+
+═══════════════════════════════════════════════════════════════
+
+📋 CONTENT STRUCTURE:
+═══════════════════════════════════════════════════════════════
+
+1. HERO (100vh)
+   "FLAKTAPE" title + tower image + "Out Now" label
+   Full-screen immersive entry point
+
+2. DIVIDER (40vh)
+   Floating tower with 8% opacity
+   Transition between sections
+
+3. ABOUT (100vh)
+   Section title: "A Structure Of Sound"
+   Large tower image
+   Poetic minimal heading
+
+4. DIVIDER (40vh)
+   Floating tower animation
+
+5. TRACKS (100vh)
+   "Tracks" heading
+   6 square cards (3x2 grid, responsive)
+   Each: Track # + Title (abbreviated) + Time
+
+6. DIVIDER (40vh)
+   Floating tower
+
+7. LISTEN (100vh)
+   "Listen" heading in white on black
+   Inverted tower
+   6 square buttons (3x2 grid, responsive)
+   Streaming platform names (abbreviated)
+
+8. DIVIDER (40vh)
+   Floating tower
+
+9. FOOTER (50vh)
+   Artist name "Paqay" on black
+   Year "2026"
+   Links: Web, Insta, Twitter, Mail
+
+═══════════════════════════════════════════════════════════════
+
+🎨 DESIGN DECISIONS:
+═══════════════════════════════════════════════════════════════
+
+✓ Square aspect ratios (1:1) for visual balance and symmetry
+✓ Minimal text: Only track numbers and platform names
+✓ Fullscreen sections: Immersive, forces visual focus
+✓ No navigation bars: Pure content flow
+✓ Drop shadows only on hero tower (subtle depth)
+✓ Inverted imagery in dark sections (high contrast)
+✓ Floating animations (organic, not mechanical)
+✓ Staggered animations (0.1s delays create rhythm)
+✓ Fixed parallax background (subtle, not distracting)
+✓ No borders on hero/sections (clean, minimal)
+✓ Monospace font for labels (technical, design-forward)
+
+═══════════════════════════════════════════════════════════════
+
+💾 TECHNICAL SPECS:
+═══════════════════════════════════════════════════════════════
+
+• File: FLAKTAPE.html
+• Size: 18 KB (single file)
+• Lines: 646
+• Format: HTML5 + CSS3 + Vanilla JavaScript
+• Fonts: Google Fonts (Unbounded 900, Space Mono 700)
+• Animations: 6 @keyframes (GPU-accelerated)
+• Responsive: Mobile (480px), Tablet (768px), Desktop (1024px+)
+• Performance: Optimized, minimal dependencies
+
+═══════════════════════════════════════════════════════════════
+
+🎯 USER EXPERIENCE:
+═══════════════════════════════════════════════════════════════
+
+Scroll through an immersive visual journey where:
+• The tower is your constant companion
+• Each section is a full-screen moment
+• Minimal text gets out of the way
+• Animation rewards your scroll
+• Color inverts between light/dark sections
+• Buttons scale and respond to your hover
+• The entire experience is about FEELING, not reading
+
+═══════════════════════════════════════════════════════════════
+
+🔧 CUSTOMIZATION:
+═══════════════════════════════════════════════════════════════
+
+Edit track names (line ~315):
+  <div class="track-title">Found</div>  →  <div class="track-title">YourTitle</div>
+
+Edit track times (line ~317):
+  <div class="track-time">2:34</div>  →  <div class="track-time">X:XX</div>
+
+Edit streaming links (line ~355):
+  <a href="#">Spotify</a>  →  <a href="https://spotify.com/...">Spotify</a>
+
+Edit footer links (line ~379):
+  <a href="#">Web</a>  →  <a href="https://yoursite.com">Web</a>
+
+Optional: Change section heading (line ~265):
+  "A Structure Of Sound"  →  "Your Tagline Here"
+
+═══════════════════════════════════════════════════════════════
+
+✨ WHAT CHANGED FROM v2.0:
+═══════════════════════════════════════════════════════════════
+
+❌ REMOVED:
+  • Most descriptive text
+  • Credit sections
+  • Information blocks
+  • Horizontal layouts
+  • Navigation menus
+
+✅ ADDED:
+  • Fullscreen sections (immersive)
+  • Square visual grids
+  • Aspect ratio 1:1 consistency
+  • Floating divider animations
+  • Poetic section headings
+  • Monospace minimal labels
+  • Inverted imagery (dark sections)
+  • Parallax background
+  • Staggered animation delays
+  • Cubed-bezier spring easing
+
+🎨 RESULT:
+  From information-heavy to DESIGN-FIRST.
+  Pure visual experience.
+  Album release as an ART PIECE, not a marketing page.
+
+═══════════════════════════════════════════════════════════════
+
+Created: April 9, 2026
+Version: 3.0 - Design First
+Status: ✅ Production Ready
+
+Less text. More tower. More space. More art.
+
+═══════════════════════════════════════════════════════════════

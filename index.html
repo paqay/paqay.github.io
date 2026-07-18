@@ -127,7 +127,7 @@
       -ms-user-select: none;
     }
 
-    .logo.ig-ios-fallback {
+    .logo.ig-inapp-fallback {
       mix-blend-mode: normal;
       -webkit-mix-blend-mode: normal;
       filter: brightness(0) invert(1) drop-shadow(0 0 20px rgb(255, 255, 255));
@@ -636,10 +636,9 @@
     let isSwitchingVideo = false;
     const userAgent = navigator.userAgent || '';
     const isInstagramInApp = /Instagram/i.test(userAgent);
-    const isIOSDevice = /iPhone|iPad|iPod/i.test(userAgent);
 
-    if (logo && isInstagramInApp && isIOSDevice) {
-      logo.classList.add('ig-ios-fallback');
+    if (logo && isInstagramInApp) {
+      logo.classList.add('ig-inapp-fallback');
     }
 
     function trackEvent(eventName, props = {}) {

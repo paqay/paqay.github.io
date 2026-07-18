@@ -88,6 +88,7 @@
       font-family: Arial, sans-serif;
       overflow: hidden;
       background: #000; /* Fixes white flash during video switch */
+      isolation: isolate;
     }
 
     .background-video {
@@ -113,13 +114,24 @@
       transition: transform 0.3s;
       cursor: pointer;
       mix-blend-mode: difference;
+      -webkit-mix-blend-mode: difference;
       filter: drop-shadow(0 0 20px rgb(255, 255, 255));
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
       user-drag: none;
       -webkit-user-drag: none;
       user-select: none;
       -moz-user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
+    }
+
+    .logo.ig-ios-fallback {
+      mix-blend-mode: normal;
+      -webkit-mix-blend-mode: normal;
+      filter: invert(1) drop-shadow(0 0 20px rgb(255, 255, 255));
+      -webkit-filter: invert(1) drop-shadow(0 0 20px rgb(255, 255, 255));
     }
 
     @media (hover: hover) {
@@ -622,6 +634,14 @@
     let masterGain;
     let isMuted = true;
     let isSwitchingVideo = false;
+    const userAgent = navigator.userAgent || '';
+    const isInstagramInApp = /Instagram/i.test(userAgent);
+    const isIOSDevice = /iPhone|iPad|iPod/i.test(userAgent);
+
+    if (logo && isInstagramInApp && isIOSDevice) {
+      logo.classList.add('ig-ios-fallback');
+    }
+
     function trackEvent(eventName, props = {}) {
       if (typeof window.gtag === 'function') {
         window.gtag('event', eventName, props);
